@@ -1,0 +1,1604 @@
+:root {
+    --primary: #7c4dff;
+    --primary-light: #b47cff;
+    --primary-dark: #3f1dcb;
+    --secondary: #00e5ff;
+    --dark: #121212;
+    --darker: #0a0a0a;
+    --dark-light: #1e1e1e;
+    --light: #ffffff;
+    --light-dim: #b3b3b3;
+    --success: #00c853;
+    --danger: #ff3d00;
+    --warning: #ffab00;
+    --info: #00b0ff;
+    --border-radius: 12px;
+    --border-radius-sm: 6px;
+    --shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --glass: rgba(30, 30, 30, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+    * {
+        font-family: 'Inter var', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+}
+
+body {
+    background-color: var(--darker);
+    color: var(--light);
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+        radial-gradient(at 80% 20%, rgba(124, 77, 255, 0.1) 0px, transparent 50%),
+        radial-gradient(at 20% 80%, rgba(0, 229, 255, 0.1) 0px, transparent 50%);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: fit-content;
+    position: sticky;
+    /* Torna a sidebar fixa */
+    top: 10%;
+    /* Fixa no topo */
+}
+
+.logo-icon {
+    color: var(--primary);
+    font-size: 28px;
+}
+
+.nav {
+    display: flex;
+    gap: 5px;
+}
+
+.nav-item {
+    color: var(--light-dim);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: var(--light);
+    background-color: var(--dark-light);
+}
+
+.nav-item i {
+    font-size: 16px;
+}
+
+/* Hamburger Menu Styles */
+.hamburger-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 999;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--darker);
+    z-index: 1000;
+    padding: 80px 20px 20px;
+    transform: translateX(-100%);
+    transition: var(--transition);
+    border-right: 1px solid var(--glass-border);
+    overflow-y: auto;
+}
+
+.mobile-menu.active {
+    transform: translateX(0);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-menu .sidebar-section {
+    margin-bottom: 25px;
+}
+
+.mobile-menu .sidebar-title {
+    font-size: 14px;
+    color: var(--light-dim);
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.mobile-menu .sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: var(--light);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 5px;
+    transition: var(--transition);
+}
+
+.mobile-menu .sidebar-link:hover {
+    background: var(--dark-light);
+    color: var(--primary);
+}
+
+.mobile-menu .sidebar-link i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.mobile-menu .btn {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 768px) {
+    .hamburger-btn {
+        display: block;
+    }
+
+    .nav-items {
+        display: none;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 480px 1fr;
+    gap: 25px;
+}
+
+.sidebar {
+    margin-bottom: 20px;
+}
+
+
+.sidebar-title {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: var(--light-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-title i {
+    font-size: 14px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--light);
+    text-decoration: none;
+    padding: 10px 0;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.sidebar-link:hover {
+    color: var(--primary);
+    padding-left: 5px;
+}
+
+.sidebar-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Adicione estes estilos ao seu CSS */
+.recurring-bills {
+    grid-column: span 1;
+}
+
+.bill-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background-color: var(--dark-light);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 10px;
+    transition: var(--transition);
+}
+
+.bill-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.bill-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bill-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.bill-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.bill-action-btn {
+    background: none;
+    border: none;
+    color: var(--light-dim);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+}
+
+.bill-action-btn:hover {
+    color: var(--danger);
+}
+
+.add-bill-container {
+    /* display: flex; */
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.add-bill-container input {
+    flex-grow: 1;
+    padding: 10px 15px;
+}
+
+/* Remove o estilo padrão do checkbox */
+.bill-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--primary-light);
+    border-radius: 4px;
+    background-color: var(--dark-light);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    margin-right: 12px;
+}
+
+/* Estilo quando o checkbox está marcado */
+.bill-checkbox:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Estilo do "check" interno */
+.bill-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+#recurringBillsList,
+#recurringBillsList1 {
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-right: -10px;
+
+}
+
+/* Efeito hover */
+.bill-checkbox:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
+}
+
+/* Efeito de foco (acessibilidade) */
+.bill-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.3);
+}
+
+/* Estilo do label */
+.bill-name {
+    color: var(--light);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    user-select: none;
+
+}
+
+/* Efeito quando o checkbox está marcado */
+.bill-checkbox:checked~.bill-name {
+    color: var(--light-dim);
+    text-decoration: line-through;
+    opacity: 0.8;
+}
+
+.empty-recurring {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--light-dim);
+    font-size: 14px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(124, 77, 255, 0.2);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background-color: rgba(124, 77, 255, 0.1);
+    box-shadow: none;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.card-title i {
+    color: var(--light-dim);
+    font-size: 16px;
+}
+
+.accounts {
+    grid-column: span 2;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.account-item:last-child {
+    border-bottom: none;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.account-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--dark-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.account-name {
+    font-weight: 500;
+}
+
+.account-type {
+    font-size: 12px;
+    color: var(--light-dim);
+    margin-top: 2px;
+}
+
+.account-balance {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.positive {
+    color: var(--success);
+}
+
+.negative {
+    color: var(--danger);
+}
+
+.monthly-summary {
+    grid-column: span 2;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.summary-item {
+    background-color: var(--dark-light);
+    padding: 20px;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+}
+
+.summary-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.summary-label {
+    font-size: 13px;
+    color: var(--light-dim);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.summary-label i {
+    font-size: 12px;
+}
+
+.summary-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 5px 0;
+}
+
+.income {
+    color: var(--success);
+}
+
+.expense {
+    color: var(--danger);
+}
+
+.savings {
+    color: var(--info);
+}
+
+.rate {
+    color: var(--warning);
+}
+
+.calendar {
+    grid-column: span 2;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.calendar-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dark-light);
+    color: var(--light);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.calendar-nav-btn:hover {
+    background-color: var(--primary);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-day {
+    padding: 12px 0;
+    text-align: center;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+    position: relative;
+    font-weight: 500;
+}
+
+.calendar-day.header {
+    font-weight: 600;
+    color: var(--light-dim);
+    padding-bottom: 15px;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.calendar-day.current {
+    background-color: var(--primary);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+}
+
+.calendar-day.other-month {
+    opacity: 0.3;
+}
+
+.calendar-day.has-event {
+    cursor: pointer;
+}
+
+.calendar-day.has-event::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 6px;
+    height: 6px;
+    background-color: var(--secondary);
+    border-radius: 50%;
+}
+
+.calendar-day.has-event:hover {
+    background-color: var(--dark-light);
+}
+
+.transactions {
+    grid-column: span 2;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    gap: 5px;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--light-dim);
+    border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+}
+
+.tab.active {
+    border-bottom: 2px solid var(--primary);
+    color: var(--primary);
+    background-color: rgba(124, 77, 255, 0.1);
+}
+
+.tab:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--light);
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--dark-light);
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+    margin: 10px 0;
+}
+
+.transaction-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: translateX(3px);
+}
+
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(124, 77, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.transaction-details {
+    flex-grow: 1;
+}
+
+.transaction-name {
+    font-weight: 500;
+    margin-bottom: 3px;
+}
+
+.transaction-category {
+    font-size: 12px;
+    color: var(--light-dim);
+}
+
+.transaction-amount {
+    font-weight: 600;
+}
+
+/* Estilos para os filtros de transações */
+.transaction-filters {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.filter-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--light-dim);
+    font-weight: 500;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filter-btn {
+    background-color: var(--dark-light);
+    border: 1px solid var(--glass-border);
+    color: var(--light-dim);
+    padding: 8px 12px;
+    border-radius: var(--border-radius-sm);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: rgba(124, 77, 255, 0.1);
+    color: var(--primary);
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.filter-btn i {
+    font-size: 12px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .filter-buttons {
+        gap: 6px;
+    }
+    
+    .filter-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--light-dim);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: var(--dark-light);
+}
+
+.empty-text {
+    margin-bottom: 20px;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--dark);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow);
+    transform: translateY(20px);
+    transition: var(--transition);
+    border: 1px solid var(--glass-border);
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--light-dim);
+    font-size: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.modal-close:hover {
+    color: var(--light);
+}
+
+/* Estilos para os botões de ícone */
+.icon-modal {
+    background: none;
+    border: none;
+    color: var(--light-dim);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    margin-left: 8px;
+}
+
+.icon-modal:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light);
+}
+
+.icon-modal:first-of-type:hover {
+    color: var(--info);
+    /* Cor azul para o ícone de edição */
+}
+
+.icon-modal:last-of-type:hover {
+    color: var(--danger);
+    /* Cor vermelha para o ícone de exclusão */
+}
+
+/* Ajustes no layout da conta para acomodar os novos botões */
+.account-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.account-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--dark-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.account-details {
+    flex-grow: 1;
+    min-width: 0;
+    /* Permite que o texto quebre corretamente */
+}
+
+.account-details h4 {
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-details p {
+    font-size: 12px;
+    color: var(--light-dim);
+    margin: 4px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Container para os botões de ação */
+.account-actions {
+    display: flex;
+    margin-left: auto;
+}
+
+/* Efeito de hover no item da conta */
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--dark-light);
+    color: var(--light);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23b3b3b3' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.toasts {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--success);
+    color: white;
+    padding: 16px 24px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: var(--transition);
+    max-width: 350px;
+    width: auto;
+    pointer-events: auto;
+    border-left: 4px solid rgba(255, 255, 255, 0.3);
+}
+
+.toasts.show {
+    transform: translateY(0);
+    opacity: 1;
+    animation: slideIn 0.5s ease, fadeIn 0.5s ease;
+}
+
+.toasts.error {
+    background-color: var(--danger);
+    border-left-color: rgba(255, 255, 255, 0.5);
+}
+
+.toasts.warning {
+    background-color: var(--warning);
+    color: var(--dark);
+    border-left-color: rgba(0, 0, 0, 0.2);
+}
+
+.toasts.info {
+    background-color: var(--info);
+    border-left-color: rgba(255, 255, 255, 0.5);
+}
+
+.toasts .toast-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.toasts .toast-content {
+    flex-grow: 1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.toasts .toast-close {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.7;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 8px;
+    transition: var(--transition);
+}
+
+.toasts .toast-close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+@keyframes slideIn {
+    from { transform: translateY(100px); }
+    to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Efeito de progresso (opcional) */
+.toasts::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    transform-origin: left;
+    animation: progress 3s linear forwards;
+}
+
+@keyframes progress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .toasts {
+        max-width: calc(100% - 40px);
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+}
+/*******************************************************************************/
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background-color: var(--dark-light);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.category-item:hover {
+    background-color: var(--darker);
+}
+
+.category-item span {
+    font-size: 14px;
+    color: var(--light);
+    flex-grow: 1;
+}
+
+.delete-category-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 4px 6px;
+    margin-left: 8px;
+    font-size: 12px;
+    transition: color 0.2s ease;
+}
+
+.delete-category-btn:hover {
+    color: #ff4444;
+}
+
+.delete-category-btn i {
+    pointer-events: none; /* Ensures the click targets the button, not just the icon */
+}
+
+@media (min-width: 1020px) {
+    .fab-container {
+        display: none;
+    }
+
+}
+
+@media (max-width: 1024px) {
+    header {
+        margin-bottom: 0px;
+    }
+
+    .main-grid {
+        gap: 5px;
+        grid-template-columns: 1fr;
+    }
+
+    .acoes-rapidas {
+        margin-bottom: 10px;
+    }
+
+    .modal-content {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .content {
+        gap: 15px;
+    }
+
+    /* Tooltip para o botão flutuante */
+    /* Floating Action Button */
+    .fab-container {
+        position: fixed;
+        bottom: 30px;
+        right: 50px;
+        z-index: 999;
+    }
+
+    .fab-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        transition: var(--transition);
+    }
+
+    .fab-button:hover {
+        background-color: var(--primary-dark);
+        transform: scale(1.1);
+    }
+
+    /* Efeito de onda ao clicar */
+    .fab-button:active {
+        animation: ripple 0.6s linear;
+    }
+
+    @keyframes ripple {
+        0% {
+            box-shadow: 0 0 0 0 rgba(124, 77, 255, 0.3),
+                0 0 0 0 rgba(124, 77, 255, 0.3);
+        }
+
+        100% {
+            box-shadow: 0 0 0 15px rgba(124, 77, 255, 0),
+                0 0 0 30px rgba(124, 77, 255, 0);
+        }
+    }
+
+    /* Ajuste para mobile */
+    @media (max-width: 768px) {
+        .fab-container {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .fab-button {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+    }
+
+    .fab-button::after {
+        content: 'Adicionar Receita';
+        position: absolute;
+        right: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--dark-light);
+        color: var(--light);
+        padding: 6px 12px;
+        border-radius: var(--border-radius-sm);
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+
+    .fab-button:hover::after {
+        opacity: 1;
+    }
+    .content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .accounts,
+    .monthly-summary,
+    .calendar,
+    .transactions {
+        grid-column: span 1;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .calendar-day {
+        padding: 8px 0;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fade-in {
+        padding: 8px;
+    }
+
+    .card {
+        padding: 10px;
+    }
+
+    .tabs {
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .tab {
+        padding: 8px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .modal-content {
+        padding: 5px;
+        margin: 0px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Adicione estes estilos ao seu CSS */
+
+.modal-body {
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.account-item,
+.transaction-item,
+.debt-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: var(--dark-light);
+    border-radius: var(--border-radius-sm);
+}
+
+.account-icon,
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(124, 77, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: var(--primary);
+}
+
+.account-details,
+.transaction-details,
+.debt-info {
+    flex-grow: 1;
+}
+
+.account-details h4,
+.transaction-details h4,
+.debt-info h4 {
+    margin: 0 0 5px 0;
+    color: var(--light);
+}
+
+.account-details p,
+.transaction-details p,
+.debt-info p {
+    margin: 0;
+    color: var(--light-dim);
+    font-size: 14px;
+}
+
+.balance,
+.date {
+    font-weight: bold;
+    margin-top: 5px !important;
+}
+
+.transaction-item.income .transaction-details p {
+    color: var(--success);
+}
+
+.transaction-item.expense .transaction-details p {
+    color: var(--danger);
+}
+
+.add-account-btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+.debt-amount {
+    text-align: right;
+    font-weight: bold;
+}
+
+.summary-item {
+    background-color: var(--dark-light);
+    padding: 15px;
+    border-radius: var(--border-radius-sm);
+}
+
+.summary-item h4 {
+    margin: 0 0 10px 0;
+    color: var(--light-dim);
+}
+
+.summary-item p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--light);
+}
+
+/* Modal de Confirmação de Exclusão */
+.confirmation-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.confirmation-dialog.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.confirmation-dialog .dialog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.confirmation-dialog .dialog-content {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.confirmation-dialog.active .dialog-content {
+    transform: translateY(0);
+}
+
+.confirmation-dialog h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.confirmation-dialog p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.confirmation-dialog .dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.confirmation-dialog .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.confirmation-dialog .btn-cancel {
+    background-color: #f0f0f0;
+    color: #555;
+}
+
+.confirmation-dialog .btn-cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.confirmation-dialog .btn-confirm {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.confirmation-dialog .btn-confirm:hover {
+    background-color: #c0392b;
+}
+
+/* Efeitos para dispositivos móveis */
+@media (max-width: 480px) {
+    .confirmation-dialog .dialog-content {
+        width: 85%;
+        padding: 20px;
+    }
+
+    .confirmation-dialog .dialog-buttons {
+        flex-direction: column;
+    }
+
+    .confirmation-dialog .btn {
+        width: 100%;
+    }
+}
