@@ -1409,3 +1409,94 @@ const resetarDados = () => {
         location.reload();
     }
 };
+/************************************************************** */
+// Exportar dados para arquivo
+document.getElementById('exportDataBtn').addEventListener('click', exportData);
+
+// Importar dados de arquivo
+document.getElementById('importDataBtn').addEventListener('click', () => {
+    document.getElementById('importFileInput').click();
+});
+// Exportar dados para arquivo
+document.getElementById('exportDataBtn1').addEventListener('click', exportData);
+
+// Importar dados de arquivo
+document.getElementById('importDataBtn1').addEventListener('click', () => {
+    document.getElementById('importFileInput1').click();
+});
+
+document.getElementById('importFileInput').addEventListener('change', importData);
+document.getElementById('importFileInput1').addEventListener('change', importData);
+
+// Função para exportar dados
+function exportData() {
+    // Coletar todos os dados do localStorage
+    const appData = {
+        financeAccounts: JSON.parse(localStorage.getItem('financeAccounts') || '[]'),
+        financeTransactions: JSON.parse(localStorage.getItem('financeTransactions') || '[]'),
+        financeCreditCards: JSON.parse(localStorage.getItem('financeCreditCards') || '[]'),
+        recurringBills: JSON.parse(localStorage.getItem('recurringBills') || '[]'),
+        // Adicione outros dados que deseja backup
+        exportDate: new Date().toISOString()
+    };
+
+    // Criar arquivo JSON
+    const dataStr = JSON.stringify(appData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    
+    // Criar link de download
+    const exportFileDefaultName = `finance-flex-backup-${new Date().toISOString().split('T')[0]}.json`;
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
+    
+    showToast('Backup exportado com sucesso!', 'success');
+}
+
+// Função para importar dados
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const appData = JSON.parse(e.target.result);
+            
+            // Verificar se o arquivo é válido
+            if (!appData.financeAccounts || !appData.financeTransactions) {
+                throw new Error('Arquivo de backup inválido');
+            }
+
+            // Confirmar antes de sobrescrever dados
+            if (confirm('Isso substituirá todos os seus dados atuais. Continuar?')) {
+                // Salvar dados no localStorage
+                localStorage.setItem('financeAccounts', JSON.stringify(appData.financeAccounts));
+                localStorage.setItem('financeTransactions', JSON.stringify(appData.financeTransactions));
+                
+                if (appData.financeCreditCards) {
+                    localStorage.setItem('financeCreditCards', JSON.stringify(appData.financeCreditCards));
+                }
+                
+                if (appData.recurringBills) {
+                    localStorage.setItem('recurringBills', JSON.stringify(appData.recurringBills));
+                }
+                
+                showToast('Dados importados com sucesso!', 'success');
+                
+                // Recarregar a aplicação
+                setTimeout(() => location.reload(), 1000);
+            }
+        } catch (error) {
+            console.error('Erro ao importar dados:', error);
+            showToast('Erro ao importar backup: ' + error.message, 'error');
+        }
+        
+        // Resetar o input
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}

@@ -1192,6 +1192,7 @@ header {
     pointer-events: none; /* Ensures the click targets the button, not just the icon */
 }
 
+
 @media (min-width: 1020px) {
     .fab-container {
         display: none;
@@ -1601,4 +1602,7 @@ header {
     .confirmation-dialog .btn {
         width: 100%;
     }
+}
+.reset-btn {
+    cursor: pointer;
 }
