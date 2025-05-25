@@ -1075,12 +1075,12 @@ function populateAccountDropdowns() {
     accounts.forEach(account => {
         const option = document.createElement('option');
         option.value = account.id;
-        option.textContent = `${account.name} (${formatCurrency(account.balance, account.currency)})`;
+        option.textContent = `${account.name}`;
         accountSelect.appendChild(option);
 
         const option2 = document.createElement('option');
         option2.value = account.id;
-        option2.textContent = `${account.name} (${formatCurrency(account.balance, account.currency)})`;
+        option2.textContent = `${account.name}`;
         toAccountSelect.appendChild(option2);
     });
 }
@@ -1128,10 +1128,10 @@ function formatCurrency(amount, currency) {
 
 function getAccountIcon(type) {
     switch (type) {
-        case 'Cash': return 'fa-money-bill-wave';
-        case 'Bank': return 'fa-university';
-        case 'Credit': return 'fa-credit-card';
-        case 'Investment': return 'fa-chart-line';
+        case 'Dinheiro': return 'fa-money-bill-wave';
+        case 'Banco': return 'fa-university';
+        case 'Crédito': return 'fa-credit-card';
+        case 'Investimento': return 'fa-chart-line';
         case 'Digital': return 'fa-mobile-alt';
         default: return 'fa-wallet';
     }
@@ -1140,27 +1140,27 @@ function getAccountIcon(type) {
 function getTransactionIcon(type, category) {
     if (type === 'income') {
         switch (category) {
-            case 'Salary': return 'fa-briefcase';
-            case 'Bonus': return 'fa-gift';
+            case 'Salário': return 'fa-briefcase';
+            case 'Bônus': return 'fa-gift';
             case 'Freelance': return 'fa-laptop-code';
-            case 'Investment': return 'fa-chart-line';
-            case 'Gift': return 'fa-gift';
+            case 'Investimento': return 'fa-chart-line';
+            case 'Presente': return 'fa-gift';
             default: return 'fa-dollar-sign';
         }
     } else {
         switch (category) {
-            case 'Housing': return 'fa-home';
-            case 'Utilities': return 'fa-bolt';
-            case 'Food': return 'fa-utensils';
-            case 'Dining': return 'fa-hamburger';
-            case 'Transportation': return 'fa-car';
-            case 'Healthcare': return 'fa-heartbeat';
-            case 'Insurance': return 'fa-shield-alt';
-            case 'Entertainment': return 'fa-gamepad';
-            case 'Shopping': return 'fa-shopping-bag';
-            case 'Education': return 'fa-graduation-cap';
-            case 'Gifts': return 'fa-gift';
-            case 'Travel': return 'fa-plane';
+            case 'Moradia': return 'fa-home';
+            case 'Contas': return 'fa-bolt';
+            case 'Alimentação': return 'fa-utensils';
+            case 'Restaurante': return 'fa-hamburger';
+            case 'Transporte': return 'fa-car';
+            case 'Saúde': return 'fa-heartbeat';
+            case 'Seguro': return 'fa-shield-alt';
+            case 'Lazer': return 'fa-gamepad';
+            case 'Compras': return 'fa-shopping-bag';
+            case 'Educação': return 'fa-graduation-cap';
+            case 'Presentes': return 'fa-gift';
+            case 'Viagens': return 'fa-plane';
             default: return 'fa-receipt';
         }
     }
@@ -1173,7 +1173,7 @@ let recurringBills = [];
 function initRecurringBills() {
     const savedBills = localStorage.getItem('recurringBills');
     recurringBills = savedBills ? JSON.parse(savedBills) : [
-        { id: 'bill1', name: 'Conta Luz', checked: false },
+        { id: 'bill1', name: 'Dentista', checked: false },
         { id: 'bill2', name: 'Internet', checked: false },
         { id: 'bill3', name: 'Celular', checked: false }
     ];
