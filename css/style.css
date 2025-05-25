@@ -1285,7 +1285,7 @@ header {
     }
 
     .fab-button::after {
-        content: 'Adicionar Receita';
+        content: 'Adicionar';
         position: absolute;
         right: 70px;
         top: 50%;
