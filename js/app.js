@@ -1387,7 +1387,7 @@ addExpenseBtnMobile.addEventListener('click', () => {
 
 // Adiciona evento ao botão flutuante
 document.getElementById('fabIncome').addEventListener('click', () => {
-    transactionModalTitle.textContent = 'Adicionar Nova Receita';
+    transactionModalTitle.textContent = 'Adicionar';
     document.getElementById('transactionType').value = 'income';
     transferAccountGroup.style.display = 'none';
     transactionModal.classList.add('active');
