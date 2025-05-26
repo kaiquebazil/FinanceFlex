@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     addIncomeBtn.addEventListener('click', () => {
-        transactionModalTitle.textContent = 'Adcionar Nova Receita';
+        transactionModalTitle.textContent = 'Adicionar Nova Receita';
         document.getElementById('transactionType').value = 'income';
         transferAccountGroup.style.display = 'none';
         transactionModal.classList.add('active');
@@ -73,13 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Transaction type change
     transactionType.addEventListener('change', (e) => {
         if (e.target.value === 'transfer') {
-            transactionModalTitle.textContent = 'Adcionar Transferência';
+            transactionModalTitle.textContent = 'Adicionar Transferência';
             transferAccountGroup.style.display = 'block';
         } else if (e.target.value === 'income') {
-            transactionModalTitle.textContent = 'Adcionar Nova Receita';
+            transactionModalTitle.textContent = 'Adicionar Nova Receita';
             transferAccountGroup.style.display = 'none';
         } else {
-            transactionModalTitle.textContent = 'Adcionar Nova Despesa';
+            transactionModalTitle.textContent = 'Adicionar Nova Despesa';
             transferAccountGroup.style.display = 'none';
         }
     });
