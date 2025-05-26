@@ -1207,7 +1207,7 @@ function renderRecurringBills() {
         billElement.innerHTML = `
             <div class="bill-info">
                 <input type="checkbox" id="check-${bill.id}" class="bill-checkbox" ${bill.checked ? 'checked' : ''}>
-                <label for="check-${bill.id}" class="icon-modal bill-name">${bill.name}</label>
+                <label for="check-${bill.id}" class="bill-name">${bill.name}</label>
             </div>
             <div class="bill-actions">
                 <button class="icon-modal bill-action-btn delete-bill" data-id="${bill.id}">
@@ -1436,6 +1436,7 @@ function exportData() {
         financeTransactions: JSON.parse(localStorage.getItem('financeTransactions') || '[]'),
         financeCreditCards: JSON.parse(localStorage.getItem('financeCreditCards') || '[]'),
         recurringBills: JSON.parse(localStorage.getItem('recurringBills') || '[]'),
+        financeCategories: JSON.parse(localStorage.getItem('financeCategories') || '[]'),
         // Adicione outros dados que deseja backup
         exportDate: new Date().toISOString()
     };
@@ -1484,6 +1485,11 @@ function importData(event) {
                 if (appData.recurringBills) {
                     localStorage.setItem('recurringBills', JSON.stringify(appData.recurringBills));
                 }
+
+                // Importar categorias, se existirem
+                if (appData.financeCategories) {
+                    localStorage.setItem('financeCategories', JSON.stringify(appData.financeCategories));
+                }
                 
                 showToast('Dados importados com sucesso!', 'success');
                 
@@ -1500,3 +1506,4 @@ function importData(event) {
     };
     reader.readAsText(file);
 }
+
