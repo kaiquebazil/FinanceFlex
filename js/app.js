@@ -814,7 +814,7 @@ function addAccount() {
     accountForm.reset();
     loadAccounts();
     populateAccountDropdowns();
-    showToast('Account added successfully!');
+    showToast('Conta Adicionada com Sucesso!');
 }
 
 // ADICIONAR TRANFERENCIA
