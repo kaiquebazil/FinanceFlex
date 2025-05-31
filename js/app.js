@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listeners for modals
     addAccountBtns.addEventListener('click', () => {
-        accountModal.classList.add('active');
-    });
+            accountModal.classList.add('active');
+        });
 
     addIncomeBtn.addEventListener('click', () => {
         transactionModalTitle.textContent = 'Adicionar Nova Receita';
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupFilterButtons() {
     // Event listeners para os botões de filtro (tipo)
     document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn[data-filter]').forEach(b => {
                 b.classList.remove('active');
             });
@@ -152,7 +152,7 @@ function setupFilterButtons() {
 
     // Event listeners para os botões de período
     document.querySelectorAll('.filter-btn[data-period]').forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn[data-period]').forEach(b => {
                 b.classList.remove('active');
             });
@@ -167,10 +167,10 @@ function setupFilterButtons() {
 function loadTransactionCategories() {
     const transactions = JSON.parse(localStorage.getItem('financeTransactions')) || [];
     const categorySelect = document.getElementById('categorySelect');
-
+    
     // Extrair categorias únicas
     const categories = [...new Set(transactions.map(t => t.category))].filter(Boolean);
-
+    
     // Limpar e preencher dropdown
     categorySelect.innerHTML = '<option value="all">Todas categorias</option>';
     categories.forEach(category => {
@@ -179,9 +179,9 @@ function loadTransactionCategories() {
         option.textContent = category;
         categorySelect.appendChild(option);
     });
-
+    
     // Event listener para filtro de categoria
-    categorySelect.addEventListener('change', function () {
+    categorySelect.addEventListener('change', function() {
         currentCategory = this.value;
         loadFilteredTransactions();
     });
@@ -191,13 +191,13 @@ function loadTransactionCategories() {
 function loadFilteredTransactions() {
     const transactions = JSON.parse(localStorage.getItem('financeTransactions')) || [];
     const accounts = JSON.parse(localStorage.getItem('financeAccounts')) || [];
-
+    
     // Aplicar todos os filtros
     let filteredTransactions = applyFilters(transactions);
-
+    
     // Ordenar por data (mais recente primeiro)
     filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+    
     // Renderizar resultados
     renderTransactions(filteredTransactions, accounts);
 }
@@ -205,20 +205,20 @@ function loadFilteredTransactions() {
 // Aplicar todos os filtros
 function applyFilters(transactions) {
     let result = [...transactions];
-
+    
     // Filtro por tipo
     if (currentFilter !== 'all') {
         result = result.filter(t => t.type === currentFilter);
     }
-
+    
     // Filtro por categoria
     if (currentCategory !== 'all') {
         result = result.filter(t => t.category === currentCategory);
     }
-
+    
     // Filtro por período
     result = filterByPeriod(result);
-
+    
     return result;
 }
 
@@ -226,7 +226,7 @@ function applyFilters(transactions) {
 function filterByPeriod(transactions) {
     const now = new Date();
     let startDate, endDate;
-
+    
     switch (currentPeriod) {
         case 'today':
             startDate = new Date(now.setHours(0, 0, 0, 0));
@@ -236,7 +236,7 @@ function filterByPeriod(transactions) {
             startDate = new Date(now);
             startDate.setDate(now.getDate() - now.getDay());
             startDate.setHours(0, 0, 0, 0);
-
+            
             endDate = new Date(now);
             endDate.setDate(now.getDate() + (6 - now.getDay()));
             endDate.setHours(23, 59, 59, 999);
@@ -254,7 +254,7 @@ function filterByPeriod(transactions) {
         default:
             return transactions;
     }
-
+    
     return transactions.filter(t => {
         const transDate = new Date(t.date);
         return transDate >= startDate && transDate <= endDate;
@@ -264,7 +264,7 @@ function filterByPeriod(transactions) {
 // Renderizar transações (agrupadas por categoria)
 function renderTransactions(transactions, accounts) {
     const container = document.getElementById('transactionsModalContent');
-
+    
     if (transactions.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
@@ -276,9 +276,9 @@ function renderTransactions(transactions, accounts) {
         `;
         return;
     }
-
+    
     container.innerHTML = '';
-
+    
     // Agrupar por categoria
     const transactionsByCategory = transactions.reduce((acc, transaction) => {
         const category = transaction.category || 'Sem categoria';
@@ -286,17 +286,17 @@ function renderTransactions(transactions, accounts) {
         acc[category].push(transaction);
         return acc;
     }, {});
-
+    
     // Renderizar cada categoria
     for (const [category, categoryTransactions] of Object.entries(transactionsByCategory)) {
         const categoryElement = document.createElement('div');
         categoryElement.className = 'category-group';
-
+        
         // Calcular total da categoria
         const categoryTotal = categoryTransactions.reduce((sum, t) => {
             return t.type === 'income' ? sum + t.amount : sum - t.amount;
         }, 0);
-
+        
         // Header da categoria
         categoryElement.innerHTML = `
             <div class="category-header">
@@ -306,14 +306,14 @@ function renderTransactions(transactions, accounts) {
                 </div>
             </div>
         `;
-
+        
         // Adicionar transações
         const transactionsList = document.createElement('div');
         categoryTransactions.forEach(transaction => {
             const account = accounts.find(a => a.id === transaction.account);
             transactionsList.appendChild(createTransactionElement(transaction, account));
         });
-
+        
         categoryElement.appendChild(transactionsList);
         container.appendChild(categoryElement);
     }
@@ -323,7 +323,7 @@ function renderTransactions(transactions, accounts) {
 function createTransactionElement(transaction, account) {
     const element = document.createElement('div');
     element.className = 'transaction-item';
-
+    
     element.innerHTML = `
         <div class="transaction-icon ${transaction.type}">
             <i class="fas ${getTransactionIcon(transaction.type, transaction.category)}"></i>
@@ -339,7 +339,7 @@ function createTransactionElement(transaction, account) {
             ${transaction.type === 'income' ? '+' : '-'}${formatCurrency(transaction.amount, account?.currency || 'BRL')}
         </div>
     `;
-
+    
     return element;
 }
 
@@ -574,9 +574,9 @@ function loadTransactions() {
             transactionsModalContent.innerHTML = `
                 <div class="transactions-list">
                     ${transactions.map(transaction => {
-                const accounts = JSON.parse(localStorage.getItem('financeAccounts')) || [];
-                const account = accounts.find(a => a.id === transaction.account);
-                return `
+                        const accounts = JSON.parse(localStorage.getItem('financeAccounts')) || [];
+                        const account = accounts.find(a => a.id === transaction.account);
+                        return `
                             <div class="transaction-item">
                                 <div class="transaction-icon">
                                     <i class="fas ${getTransactionIcon(transaction.type, transaction.category)}"></i>
@@ -594,7 +594,7 @@ function loadTransactions() {
                                 </button>
                             </div>
                         `;
-            }).join('')}
+                    }).join('')}
                 </div>
             `;
         }
@@ -814,7 +814,7 @@ function addAccount() {
     accountForm.reset();
     loadAccounts();
     populateAccountDropdowns();
-    showToast('Conta adicionada com sucesso!');
+    showToast('Conta Adicionada com Sucesso!');
 }
 
 // ADICIONAR TRANFERENCIA
@@ -1047,20 +1047,20 @@ function populateTransactionCategories() {
     const addBtn = document.getElementById('addcategoriasBtn');
     const addNewcategotia = document.getElementById('newcategotiaName');
     addBtn.onclick = function () {
-        const newCategory = addNewcategotia ? addNewcategotia.value.trim() : '';
-        if (newCategory) {
-            let categories = JSON.parse(localStorage.getItem('financeCategories')) || [];
-            if (!categories.includes(newCategory)) {
-                categories.push(newCategory);
-                localStorage.setItem('financeCategories', JSON.stringify(categories));
-                populateTransactionCategories();
-                showToast('Categoria adicionada com sucesso!');
-            } else {
-                showToast('Categoria já existe!', 'error');
+            const newCategory = addNewcategotia ? addNewcategotia.value.trim() : '';
+            if (newCategory) {
+                let categories = JSON.parse(localStorage.getItem('financeCategories')) || [];
+                if (!categories.includes(newCategory)) {
+                    categories.push(newCategory);
+                    localStorage.setItem('financeCategories', JSON.stringify(categories));
+                    populateTransactionCategories();
+                    showToast('Categoria adicionada com sucesso!');
+                } else {
+                    showToast('Categoria já existe!', 'error');
+                }
+                addNewcategotia.value = '';
             }
-            addNewcategotia.value = '';
-        }
-    };
+        };
 }
 
 // Populate account dropdowns
@@ -1090,7 +1090,7 @@ function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     const toastIcon = toast.querySelector('.toast-icon');
     const toastContent = toast.querySelector('.toast-content');
-
+    
     // Define o ícone com base no tipo
     const icons = {
         success: 'fa-check-circle',
@@ -1098,19 +1098,19 @@ function showToast(message, type = 'success') {
         warning: 'fa-exclamation-triangle',
         info: 'fa-info-circle'
     };
-
+    
     // Atualiza o conteúdo
     toast.className = 'toasts';
     toast.classList.add(type);
     toastIcon.className = `fas ${icons[type]} toast-icon`;
     toastContent.textContent = message;
     toast.classList.add('show');
-
+    
     // Remove automaticamente após 5 segundos
     setTimeout(() => {
         toast.classList.remove('show');
     }, 5000);
-
+    
     // Fechar ao clicar no botão
     toast.querySelector('.toast-close').addEventListener('click', () => {
         toast.classList.remove('show');
@@ -1220,14 +1220,14 @@ function renderRecurringBills() {
 
     // Adicionar eventos
     document.querySelectorAll('.bill-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
+        checkbox.addEventListener('change', function() {
             const billId = this.id.replace('check-', '');
             toggleBillChecked(billId);
         });
     });
 
     document.querySelectorAll('.delete-bill').forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             const billId = this.getAttribute('data-id');
             removeBill(billId);
         });
@@ -1245,7 +1245,7 @@ function addBill() {
             name: billName,
             checked: false
         };
-
+        
         recurringBills.push(newBill);
         saveRecurringBills();
         renderRecurringBills();
@@ -1275,19 +1275,19 @@ function toggleBillChecked(billId) {
 
 // No DOMContentLoaded, adicione:
 document.addEventListener('DOMContentLoaded', () => {
-
+   
     initRecurringBills();
 
-
+    
     document.getElementById('addBillBtn').addEventListener('click', addBill);
-    document.getElementById('newBillName').addEventListener('keypress', function (e) {
+    document.getElementById('newBillName').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             addBill();
         }
     });
 
     document.getElementById('addcategoriasBtn').addEventListener('click', addBill);
-    document.getElementById('newcategotiaName').addEventListener('keypress', function (e) {
+    document.getElementById('newcategotiaName').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             const addNewcategotia = document.getElementById('newcategotiaName');
             const newCategory = addNewcategotia ? addNewcategotia.value.trim() : '';
@@ -1306,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
+ 
 
 
 function activateCorrespondingModal(navButton) {
@@ -1327,7 +1327,7 @@ function activateCorrespondingModal(navButton) {
 }
 
 document.querySelectorAll('.nav-b').forEach(button => {
-    button.addEventListener('click', function (e) {
+    button.addEventListener('click', function(e) {
         e.preventDefault();
 
         // Remove a classe active de todos os botões
@@ -1343,7 +1343,7 @@ document.querySelectorAll('.nav-b').forEach(button => {
 
 // Fechar modais ao clicar no botão de fechar
 document.querySelectorAll('.modal-close').forEach(btn => {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function() {
         this.closest('.modal').classList.remove('active');
     });
 });
@@ -1391,363 +1391,11 @@ document.getElementById('fabIncome').addEventListener('click', () => {
     document.getElementById('transactionType').value = 'income';
     transferAccountGroup.style.display = 'none';
     transactionModal.classList.add('active');
-
+    
     // Foca no primeiro campo do formulário
     setTimeout(() => {
         document.getElementById('transactionAmount').focus();
     }, 100);
-});
-
-
-
-/************************* COFRINHO */
-
-// Variáveis globais
-let currentPiggyBankId = null;
-
-// Inicializar cofrinhos
-function initPiggyBanks() {
-    if (!localStorage.getItem('piggyBanks')) {
-        const defaultPiggyBanks = [
-            {
-                id: 'piggy1',
-                name: 'Férias',
-                target: 5000,
-                current: 1200,
-                account: '',
-                targetDate: '',
-                color: '#00b0ff',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: 'piggy2',
-                name: 'Notebook Novo',
-                target: 3500,
-                current: 500,
-                account: '',
-                targetDate: '',
-                color: '#ff3d00',
-                createdAt: new Date().toISOString()
-            }
-        ];
-        localStorage.setItem('piggyBanks', JSON.stringify(defaultPiggyBanks));
-    }
-    loadPiggyBanks();
-}
-
-// Carregar cofrinhos
-function loadPiggyBanks() {
-    const piggyBanks = JSON.parse(localStorage.getItem('piggyBanks')) || [];
-    const piggyBanksList = document.getElementById('piggyBanksList');
-    piggyBanksList.innerHTML = '';
-
-    if (piggyBanks.length === 0) {
-        piggyBanksList.innerHTML = `
-            <div class="empty-piggy-banks">
-                <i class="fas fa-piggy-bank"></i>
-                <p>Nenhum cofrinho criado ainda</p>
-            </div>
-        `;
-        return;
-    }
-
-    piggyBanks.forEach(piggy => {
-        const percentage = Math.min(Math.round((piggy.current / piggy.target) * 100), 100);
-        const daysLeft = piggy.targetDate ? Math.ceil((new Date(piggy.targetDate) - new Date()) / (1000 * 60 * 60 * 24)) : null;
-
-        const piggyElement = document.createElement('div');
-        piggyElement.className = `piggy-bank-item ${percentage >= 100 ? 'completed' : ''}`;
-        piggyElement.style.borderLeftColor = piggy.color;
-        piggyElement.innerHTML = `
-            <div class="piggy-bank-header">
-                <div class="piggy-bank-name">${piggy.name}</div>
-                ${piggy.targetDate ? `<div class="piggy-bank-target-date">${daysLeft >= 0 ? `${daysLeft} dias restantes` : 'Prazo expirado'}</div>` : ''}
-            </div>
-            <div class="piggy-bank-progress-container">
-                <div class="piggy-bank-progress-bar" style="width: ${percentage}%; background-color: ${piggy.color}"></div>
-            </div>
-            <div class="piggy-bank-amounts">
-                <span class="piggy-bank-current">${formatCurrency(piggy.current, 'BRL')}</span>
-                <span class="piggy-bank-target">${formatCurrency(piggy.target, 'BRL')}</span>
-            </div>
-            <div class="piggy-bank-percentage">${percentage}% completo</div>
-            <div class="piggy-bank-actions">
-                <button class="piggy-bank-btn deposit-btn" data-id="${piggy.id}">
-                    <i class="fas fa-plus"></i> Depositar
-                </button>
-                <button class="piggy-bank-btn withdraw-btn" data-id="${piggy.id}">
-                    <i class="fas fa-minus"></i> Retirar
-                </button>
-                <button class="piggy-bank-btn edit-btn" data-id="${piggy.id}">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-                <button class="piggy-bank-btn danger delete-btn" data-id="${piggy.id}">
-                    <i class="fas fa-trash"></i> Apagar
-                </button>
-            </div>
-        `;
-        piggyBanksList.appendChild(piggyElement);
-    });
-
-    // Adicionar eventos
-    document.querySelectorAll('.deposit-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            currentPiggyBankId = this.getAttribute('data-id');
-            document.getElementById('piggyBankTransactionTitle').textContent = 'Depositar no Cofrinho';
-            document.getElementById('piggyBankOperationType').value = 'deposit';
-            document.getElementById('piggyBankTransactionModal').classList.add('active');
-        });
-    });
-
-    document.querySelectorAll('.withdraw-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            currentPiggyBankId = this.getAttribute('data-id');
-            document.getElementById('piggyBankTransactionTitle').textContent = 'Retirar do Cofrinho';
-            document.getElementById('piggyBankOperationType').value = 'withdraw';
-            document.getElementById('piggyBankTransactionModal').classList.add('active');
-        });
-    });
-
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const piggyBankId = this.getAttribute('data-id');
-            editPiggyBank(piggyBankId);
-        });
-    });
-
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const piggyBankId = this.getAttribute('data-id');
-            deletePiggyBank(piggyBankId);
-        });
-    });
-}
-
-// Adicionar novo cofrinho
-function addPiggyBank() {
-    document.getElementById('piggyBankModalTitle').textContent = 'Adicionar Cofrinho';
-    document.getElementById('piggyBankForm').reset();
-    document.getElementById('piggyBankColor').value = '#7c4dff';
-    currentPiggyBankId = null;
-    document.getElementById('piggyBankModal').classList.add('active');
-}
-
-// Editar cofrinho
-function editPiggyBank(piggyBankId) {
-    const piggyBanks = JSON.parse(localStorage.getItem('piggyBanks')) || [];
-    const piggyBank = piggyBanks.find(p => p.id === piggyBankId);
-
-    if (!piggyBank) return;
-
-    document.getElementById('piggyBankModalTitle').textContent = 'Editar Cofrinho';
-    document.getElementById('piggyBankName').value = piggyBank.name;
-    document.getElementById('piggyBankTarget').value = piggyBank.target;
-    document.getElementById('piggyBankCurrent').value = piggyBank.current;
-    document.getElementById('piggyBankAccount').value = piggyBank.account || '';
-    document.getElementById('piggyBankTargetDate').value = piggyBank.targetDate ? piggyBank.targetDate.split('T')[0] : '';
-    document.getElementById('piggyBankColor').value = piggyBank.color;
-    currentPiggyBankId = piggyBankId;
-    document.getElementById('piggyBankModal').classList.add('active');
-}
-
-// Salvar cofrinho (criação/edição)
-function savePiggyBank(e) {
-    e.preventDefault();
-
-    const piggyBanks = JSON.parse(localStorage.getItem('piggyBanks')) || [];
-    const name = document.getElementById('piggyBankName').value;
-    const target = parseFloat(document.getElementById('piggyBankTarget').value);
-    const current = parseFloat(document.getElementById('piggyBankCurrent').value);
-    const account = document.getElementById('piggyBankAccount').value;
-    const targetDate = document.getElementById('piggyBankTargetDate').value;
-    const color = document.getElementById('piggyBankColor').value;
-
-    if (current > target) {
-        showToast('O valor atual não pode ser maior que a meta!', 'error');
-        return;
-    }
-
-    if (currentPiggyBankId) {
-        // Editar cofrinho existente
-        const index = piggyBanks.findIndex(p => p.id === currentPiggyBankId);
-        if (index !== -1) {
-            piggyBanks[index] = {
-                ...piggyBanks[index],
-                name,
-                target,
-                current,
-                account,
-                targetDate: targetDate ? new Date(targetDate).toISOString() : '',
-                color
-            };
-        }
-    } else {
-        // Criar novo cofrinho
-        const newPiggyBank = {
-            id: 'piggy' + Date.now(),
-            name,
-            target,
-            current,
-            account,
-            targetDate: targetDate ? new Date(targetDate).toISOString() : '',
-            color,
-            createdAt: new Date().toISOString()
-        };
-        piggyBanks.push(newPiggyBank);
-    }
-
-    localStorage.setItem('piggyBanks', JSON.stringify(piggyBanks));
-    document.getElementById('piggyBankModal').classList.remove('active');
-    loadPiggyBanks();
-    showToast(`Cofrinho ${currentPiggyBankId ? 'atualizado' : 'criado'} com sucesso!`);
-}
-
-// Apagar cofrinho
-function deletePiggyBank(piggyBankId) {
-    if (!confirm('Tem certeza que deseja apagar este cofrinho?')) return;
-
-    const piggyBanks = JSON.parse(localStorage.getItem('piggyBanks')) || [];
-    const updatedPiggyBanks = piggyBanks.filter(p => p.id !== piggyBankId);
-
-    localStorage.setItem('piggyBanks', JSON.stringify(updatedPiggyBanks));
-    loadPiggyBanks();
-    showToast('Cofrinho apagado com sucesso!');
-}
-
-// Depositar/retirar do cofrinho
-function handlePiggyBankTransaction(e) {
-    e.preventDefault();
-
-    const piggyBanks = JSON.parse(localStorage.getItem('piggyBanks')) || [];
-    const accounts = JSON.parse(localStorage.getItem('financeAccounts')) || [];
-    const operationType = document.getElementById('piggyBankOperationType').value;
-    const amount = parseFloat(document.getElementById('piggyBankAmount').value);
-    const accountId = document.getElementById('piggyBankTransactionAccount').value;
-    const date = document.getElementById('piggyBankTransactionDate').value;
-
-    if (!currentPiggyBankId) return;
-
-    const piggyIndex = piggyBanks.findIndex(p => p.id === currentPiggyBankId);
-    if (piggyIndex === -1) return;
-
-    const piggyBank = piggyBanks[piggyIndex];
-    const accountIndex = accounts.findIndex(a => a.id === accountId);
-
-    if (operationType === 'deposit') {
-        // Verificar saldo da conta se estiver associada
-        if (accountIndex !== -1 && accounts[accountIndex].balance < amount) {
-            showToast('Saldo insuficiente na conta selecionada!', 'error');
-            return;
-        }
-
-        piggyBank.current += amount;
-
-        // Deduzir da conta se estiver associada
-        if (accountIndex !== -1) {
-            accounts[accountIndex].balance -= amount;
-
-            // Registrar transação
-            const transactions = JSON.parse(localStorage.getItem('financeTransactions')) || [];
-            transactions.push({
-                id: 'tr' + Date.now(),
-                type: 'expense',
-                amount,
-                description: `Depósito no cofrinho: ${piggyBank.name}`,
-                category: 'Economias',
-                account: accountId,
-                date: new Date(date).toISOString()
-            });
-            localStorage.setItem('financeTransactions', JSON.stringify(transactions));
-        }
-    } else {
-        // Retirada
-        if (piggyBank.current < amount) {
-            showToast('Saldo insuficiente no cofrinho!', 'error');
-            return;
-        }
-
-        piggyBank.current -= amount;
-
-        // Adicionar à conta se estiver associada
-        if (accountIndex !== -1) {
-            accounts[accountIndex].balance += amount;
-
-            // Registrar transação
-            const transactions = JSON.parse(localStorage.getItem('financeTransactions')) || [];
-            transactions.push({
-                id: 'tr' + Date.now(),
-                type: 'income',
-                amount,
-                description: `Retirada do cofrinho: ${piggyBank.name}`,
-                category: 'Economias',
-                account: accountId,
-                date: new Date(date).toISOString()
-            });
-            localStorage.setItem('financeTransactions', JSON.stringify(transactions));
-        }
-    }
-
-    // Atualizar dados
-    piggyBanks[piggyIndex] = piggyBank;
-    localStorage.setItem('piggyBanks', JSON.stringify(piggyBanks));
-    if (accountIndex !== -1) {
-        localStorage.setItem('financeAccounts', JSON.stringify(accounts));
-    }
-
-    // Fechar modal e atualizar UI
-    document.getElementById('piggyBankTransactionModal').classList.remove('active');
-    document.getElementById('piggyBankTransactionForm').reset();
-    loadPiggyBanks();
-    loadAccounts();
-    loadTransactions();
-    loadMonthlySummary();
-
-    showToast(`Operação no cofrinho realizada com sucesso!`, 'success');
-}
-
-// Preencher dropdowns de contas para cofrinhos
-function populatePiggyBankAccountDropdowns() {
-    const accounts = JSON.parse(localStorage.getItem('financeAccounts')) || [];
-    const piggyBankAccountSelect = document.getElementById('piggyBankAccount');
-    const piggyBankTransactionAccountSelect = document.getElementById('piggyBankTransactionAccount');
-
-    piggyBankAccountSelect.innerHTML = '<option value="">Não associar a conta</option>';
-    piggyBankTransactionAccountSelect.innerHTML = '<option value="">Selecione a conta</option>';
-
-    accounts.forEach(account => {
-        const option = document.createElement('option');
-        option.value = account.id;
-        option.textContent = `${account.name} (${formatCurrency(account.balance, account.currency)})`;
-        piggyBankAccountSelect.appendChild(option);
-
-        const option2 = document.createElement('option');
-        option2.value = account.id;
-        option2.textContent = `${account.name} (${formatCurrency(account.balance, account.currency)})`;
-        piggyBankTransactionAccountSelect.appendChild(option2);
-    });
-}
-
-// Adicionar eventos no DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar cofrinhos
-    initPiggyBanks();
-
-    // Adicionar eventos
-    document.getElementById('addPiggyBankBtn').addEventListener('click', addPiggyBank);
-    document.getElementById('piggyBankForm').addEventListener('submit', savePiggyBank);
-    document.getElementById('piggyBankTransactionForm').addEventListener('submit', handlePiggyBankTransaction);
-
-    // Preencher dropdowns de contas
-    populatePiggyBankAccountDropdowns();
-
-    // Atualizar data atual nos formulários
-    document.getElementById('piggyBankTransactionDate').valueAsDate = new Date();
-
-    // Evento para mudança no tipo de operação
-    document.getElementById('piggyBankOperationType').addEventListener('change', function () {
-        const title = this.value === 'deposit' ? 'Depositar no Cofrinho' : 'Retirar do Cofrinho';
-        document.getElementById('piggyBankTransactionTitle').textContent = title;
-    });
 });
 
 //Reiniciar todos os dados
@@ -1757,13 +1405,10 @@ const resetarDados = () => {
         localStorage.removeItem('financeTransactions');
         localStorage.removeItem('financeCategories');
         localStorage.removeItem('recurringBills');
-        localStorage.removeItem('piggyBanks')
         showToast('Todos os dados foram reiniciados com sucesso!', 'success');
         location.reload();
     }
 };
-
-
 /************************************************************** */
 // Exportar dados para arquivo
 document.getElementById('exportDataBtn').addEventListener('click', exportData);
@@ -1791,7 +1436,6 @@ function exportData() {
         financeTransactions: JSON.parse(localStorage.getItem('financeTransactions') || '[]'),
         financeCreditCards: JSON.parse(localStorage.getItem('financeCreditCards') || '[]'),
         recurringBills: JSON.parse(localStorage.getItem('recurringBills') || '[]'),
-        piggyBanks: JSON.parse(localStorage.getItem('piggyBanks') || '[]'),
         financeCategories: JSON.parse(localStorage.getItem('financeCategories') || '[]'),
         // Adicione outros dados que deseja backup
         exportDate: new Date().toISOString()
@@ -1800,7 +1444,7 @@ function exportData() {
     // Criar arquivo JSON
     const dataStr = JSON.stringify(appData, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
+    
     // Criar link de download
     const exportFileDefaultName = `finance-flex-backup-${new Date().toISOString().split('T')[0]}.json`;
     const linkElement = document.createElement('a');
@@ -1809,7 +1453,7 @@ function exportData() {
     document.body.appendChild(linkElement);
     linkElement.click();
     document.body.removeChild(linkElement);
-
+    
     showToast('Backup exportado com sucesso!', 'success');
 }
 
@@ -1822,7 +1466,7 @@ function importData(event) {
     reader.onload = (e) => {
         try {
             const appData = JSON.parse(e.target.result);
-
+            
             // Verificar se o arquivo é válido
             if (!appData.financeAccounts || !appData.financeTransactions) {
                 throw new Error('Arquivo de backup inválido');
@@ -1833,11 +1477,11 @@ function importData(event) {
                 // Salvar dados no localStorage
                 localStorage.setItem('financeAccounts', JSON.stringify(appData.financeAccounts));
                 localStorage.setItem('financeTransactions', JSON.stringify(appData.financeTransactions));
-
+                
                 if (appData.financeCreditCards) {
                     localStorage.setItem('financeCreditCards', JSON.stringify(appData.financeCreditCards));
                 }
-
+                
                 if (appData.recurringBills) {
                     localStorage.setItem('recurringBills', JSON.stringify(appData.recurringBills));
                 }
@@ -1846,13 +1490,9 @@ function importData(event) {
                 if (appData.financeCategories) {
                     localStorage.setItem('financeCategories', JSON.stringify(appData.financeCategories));
                 }
-
-                if (appData.piggyBanks) {
-                    localStorage.setItem('piggyBanks', JSON.stringify(appData.piggyBanks));
-                }
-
+                
                 showToast('Dados importados com sucesso!', 'success');
-
+                
                 // Recarregar a aplicação
                 setTimeout(() => location.reload(), 1000);
             }
@@ -1860,7 +1500,7 @@ function importData(event) {
             console.error('Erro ao importar dados:', error);
             showToast('Erro ao importar backup: ' + error.message, 'error');
         }
-
+        
         // Resetar o input
         event.target.value = '';
     };

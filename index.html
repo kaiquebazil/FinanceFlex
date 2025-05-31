@@ -53,14 +53,14 @@
                     <span>Reiniciar Dados</span>
                 </a>
                 <div class="backup-section">
-                    <button id="exportDataBtn" class="btn btn-outline">
-                        <i class="fas fa-file-export"></i> Exportar Dados
-                    </button>
-                    <button id="importDataBtn" class="btn btn-outline">
-                        <i class="fas fa-file-import"></i> Importar Dados
-                    </button>
-                    <input type="file" id="importFileInput" accept=".json" style="display: none;">
-                </div>
+                            <button id="exportDataBtn" class="btn btn-outline">
+                                <i class="fas fa-file-export"></i> Exportar Dados
+                            </button>
+                            <button id="importDataBtn" class="btn btn-outline">
+                                <i class="fas fa-file-import"></i> Importar Dados
+                            </button>
+                            <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                        </div>
             </div>
             <div class="sidebar-section">
                 <div class="sidebar-title">
@@ -164,20 +164,6 @@
                     <div class="summary-grid" id="monthlySummary">
                         <!-- Resumo mensal será carregado aqui -->
                     </div>
-                </div>
-
-                <div class="card piggy-banks">
-                    <div class="card-title">
-                        <span>Cofrinhos</span>
-                        <i class="fas fa-piggy-bank"></i>
-                    </div>
-                    <div id="piggyBanksList">
-                        <!-- Cofrinhos serão carregados aqui -->
-                    </div>
-                    <button id="addPiggyBankBtn" class="btn btn-outline">
-                        <i class="fas fa-plus"></i>
-                        <span>Adicionar Cofrinho</span>
-                    </button>
                 </div>
 
                 <div class="card calendar">
@@ -454,87 +440,6 @@
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Modal Cofrinhos -->
-        <div class="modal" id="piggyBankModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title" id="piggyBankModalTitle">Adicionar Cofrinho</div>
-                    <button class="modal-close">&times;</button>
-                </div>
-                <form id="piggyBankForm">
-                    <div class="form-group">
-                        <label class="form-label">Nome do Cofrinho</label>
-                        <input type="text" class="form-input" id="piggyBankName" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Meta (Valor Alvo)</label>
-                        <input type="number" class="form-input" id="piggyBankTarget" step="0.01" min="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Valor Atual</label>
-                        <input type="number" class="form-input" id="piggyBankCurrent" step="0.01" min="0" value="0"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Conta de Origem</label>
-                        <select class="form-input form-select" id="piggyBankAccount">
-                            <option value="">Não associar a conta</option>
-                            <!-- Contas serão preenchidas por JS -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Data Alvo (Opcional)</label>
-                        <input type="date" class="form-input" id="piggyBankTargetDate">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Cor do Cofrinho</label>
-                        <input type="color" class="form-input" id="piggyBankColor" value="#7c4dff">
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-outline modal-close">Cancelar</button>
-                        <button type="submit" class="btn">Salvar Cofrinho</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Modal Depositar/Retirar -->
-        <div class="modal" id="piggyBankTransactionModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title" id="piggyBankTransactionTitle">Depositar no Cofrinho</div>
-                    <button class="modal-close">&times;</button>
-                </div>
-                <form id="piggyBankTransactionForm">
-                    <div class="form-group">
-                        <label class="form-label">Tipo de Operação</label>
-                        <select class="form-input form-select" id="piggyBankOperationType" required>
-                            <option value="deposit">Depositar</option>
-                            <option value="withdraw">Retirar</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Valor</label>
-                        <input type="number" class="form-input" id="piggyBankAmount" step="0.01" min="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Conta</label>
-                        <select class="form-input form-select" id="piggyBankTransactionAccount" required>
-                            <!-- Contas serão preenchidas por JS -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Data</label>
-                        <input type="date" class="form-input" id="piggyBankTransactionDate" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-outline modal-close">Cancelar</button>
-                        <button type="submit" class="btn">Confirmar</button>
-                    </div>
-                </form>
             </div>
         </div>
 
