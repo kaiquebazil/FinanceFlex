@@ -599,7 +599,7 @@ header {
     color: var(--warning);
 }
 
-.calendar {
+.calendar, .piggy-banks {
     grid-column: span 2;
 }
 
@@ -1315,12 +1315,12 @@ header {
         grid-template-columns: 1fr;
     }
 
-    .accounts,
+    /* .accounts,
     .monthly-summary,
     .calendar,
     .transactions {
         grid-column: span 1;
-    }
+    } */
 
     .summary-grid {
         grid-template-columns: 1fr 1fr;
@@ -1607,3 +1607,129 @@ header {
     cursor: pointer;
 }
 
+
+/* Cofrinho */
+/* Estilos para Cofrinhos */
+.piggy-bank-item {
+    background: var(--dark-light);
+    border-radius: var(--border-radius-sm);
+    padding: 15px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition);
+    border-left: 4px solid var(--primary);
+}
+
+.piggy-bank-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.piggy-bank-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.piggy-bank-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--light);
+}
+
+.piggy-bank-target-date {
+    font-size: 12px;
+    color: var(--light-dim);
+}
+
+.piggy-bank-progress-container {
+    margin: 10px 0;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.piggy-bank-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background-color: var(--primary);
+    transition: width 0.5s ease;
+}
+
+.piggy-bank-amounts {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.piggy-bank-current {
+    color: var(--success);
+}
+
+.piggy-bank-target {
+    color: var(--light-dim);
+}
+
+.piggy-bank-percentage {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 5px;
+    color: var(--light-dim);
+}
+
+.piggy-bank-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.piggy-bank-btn {
+    padding: 6px 12px;
+    border-radius: var(--border-radius-sm);
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+.piggy-bank-btn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.piggy-bank-btn.danger {
+    background-color: var(--dark);
+}
+
+.piggy-bank-btn.danger:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+.empty-piggy-banks {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--light-dim);
+}
+
+.empty-piggy-banks i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: var(--dark-light);
+}
+
+/* Progresso completo */
+.piggy-bank-item.completed .piggy-bank-progress-bar {
+    background-color: var(--success);
+}
+
+.piggy-bank-item.completed .piggy-bank-name {
+    color: var(--success);
+}
