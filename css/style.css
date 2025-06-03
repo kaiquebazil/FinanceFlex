@@ -38,6 +38,19 @@ body {
     }
 }
 
+/* Adicione no final do arquivo */
+.values-hidden .account-balance,
+.values-hidden .transaction-amount,
+.values-hidden .summary-value,
+.values-hidden .piggy-bank-current,
+.values-hidden .piggy-bank-target,
+.values-hidden .piggy-bank-percentage {
+    filter: blur(5px);
+    user-select: none;
+    pointer-events: none;
+}
+
+
 body {
     background-color: var(--darker);
     color: var(--light);

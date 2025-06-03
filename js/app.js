@@ -1748,6 +1748,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = this.value === 'deposit' ? 'Depositar no Cofrinho' : 'Retirar do Cofrinho';
         document.getElementById('piggyBankTransactionTitle').textContent = title;
     });
+
+
+    const toggleValuesBtn = document.getElementById('toggleValues');
+    let valuesHidden = localStorage.getItem('valuesHidden') === 'true';
+    
+    // Atualizar estado inicial
+    updateValuesVisibility();
+    
+    toggleValuesBtn.addEventListener('click', () => {
+        valuesHidden = !valuesHidden;
+        localStorage.setItem('valuesHidden', valuesHidden);
+        updateValuesVisibility();
+    });
+
+    function updateValuesVisibility() {
+        if (valuesHidden) {
+            document.body.classList.add('values-hidden');
+            toggleValuesBtn.innerHTML = '<i class="fas fa-eye"></i>';
+            toggleValuesBtn.title = "Mostrar Valores";
+        } else {
+            document.body.classList.remove('values-hidden');
+            toggleValuesBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            toggleValuesBtn.title = "Ocultar Valores";
+        }
+    }
+
 });
 
 //Reiniciar todos os dados
