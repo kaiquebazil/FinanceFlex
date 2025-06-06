@@ -673,14 +673,14 @@ function loadMonthlySummary() {
                 <div class="summary-item">
                     <div class="summary-label">
                         <i class="fas fa-arrow-down"></i>
-                        <span>Renda</span>
+                        <span>Receitas</span>
                     </div>
                     <div class="summary-value income">${formatCurrency(income, 'BRL')}</div>
                 </div>
                 <div class="summary-item">
                     <div class="summary-label">
                         <i class="fas fa-arrow-up"></i>
-                        <span>Despesa</span>
+                        <span>Despesas</span>
                     </div>
                     <div class="summary-value expense">${formatCurrency(expense, 'BRL')}</div>
                 </div>
