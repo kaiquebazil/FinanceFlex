@@ -48,6 +48,11 @@
                     <i class="fas fa-tags"></i>
                     <span>Contas Recorrentes</span>
                 </a>
+                <a href="javascript:void(0);" class="sidebar-link nav-b" data-target="#creditCardsModal">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Cartões de Crédito</span>
+                </a>
+
                 <a onclick="resetarDados()" class="sidebar-link nav-b reset-btn">
                     <i class="fas fa-trash-restore"></i>
                     <span>Reiniciar Dados</span>
@@ -123,6 +128,10 @@
                             <i class="fas fa-tags"></i>
                             <span>Recorrentes</span>
                         </a>
+                        <a href="javascript:void(0);" class="sidebar-link nav-b" data-target="#creditCardsModal">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Cartões de Crédito</span>
+                        </a>
                         <a onclick="resetarDados()" class="sidebar-link nav-b reset-btn">
                             <i class="fas fa-trash-restore"></i>
                             <span>Reiniciar Dados</span>
@@ -156,6 +165,9 @@
                     </button>
                 </div>
 
+
+
+
                 <div class="card monthly-summary">
                     <div class="card-title">
                         <span>Resumo Mensal</span>
@@ -179,6 +191,29 @@
                         <span>Adicionar Cofrinho</span>
                     </button>
                 </div>
+
+                                        <!-- Cartão de Crédito no Dashboard -->
+        <div class="card credit-cards">
+            <div class="card-title">
+                <span>Cartões de Crédito</span>
+                <i class="fas fa-credit-card"></i>
+            </div>
+
+            <div class="credit-cards-inner" id="creditCardsDashboard">
+                <!-- Cartões serão carregados aqui dinamicamente -->
+                <div class="empty-credit-cards" style="display: none;">
+                    <i class="fas fa-credit-card"></i>
+                    <p>Nenhum cartão de crédito cadastrado</p>
+                    <button id="addFirstCreditCardBtn" class="btn btn-outline">
+                        <i class="fas fa-plus"></i> Adicionar Primeiro Cartão
+                    </button>
+                </div>
+            </div>
+
+            <button id="viewCreditCardsBtn" class="btn btn-outline">
+                <i class="fas fa-eye"></i> Ver Detalhes
+            </button>
+        </div>
 
                 <div class="card calendar">
                     <div class="card-title">
@@ -260,6 +295,7 @@
                 </form>
             </div>
         </div>
+        
 
         <!-- Modal Adicionar Transação -->
         <div class="modal" id="transactionModal">
@@ -316,6 +352,9 @@
                     </div>
                 </form>
             </div>
+
+            
+
         </div>
 
         <!-- Botão Flutuante para Adicionar Receita -->
@@ -412,6 +451,109 @@
             </div>
         </div>
 
+        
+
+        <!-- Modal Cartões de Crédito -->
+        <div class="modal" id="creditCardsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Cartões de Crédito</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="creditCardsList">
+                        <!-- Cartões serão carregados aqui -->
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button id="addCreditCardBtn" class="btn btn-outline">
+                        <i class="fas fa-plus"></i> Adicionar Cartão
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Adicionar/Editar Cartão -->
+        <div class="modal" id="creditCardModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="creditCardModalTitle">Adicionar Cartão</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="creditCardForm">
+                    <div class="form-group">
+                        <label class="form-label">Nome do Cartão</label>
+                        <input type="text" class="form-input" id="creditCardName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Limite Total</label>
+                        <input type="number" class="form-input" id="creditCardLimit" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dia de Vencimento</label>
+                        <input type="number" class="form-input" id="creditCardDueDate" min="1" max="31" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Dia de Fechamento</label>
+                        <input type="number" class="form-input" id="creditCardClosingDate" min="1" max="31" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cor do Cartão</label>
+                        <input type="color" class="form-input" id="creditCardColor" value="#7c4dff">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline modal-close">Cancelar</button>
+                        <button type="submit" class="btn">Salvar Cartão</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Nova Compra Parcelada -->
+        <div class="modal" id="creditCardPurchaseModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Nova Compra Parcelada</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="creditCardPurchaseForm">
+                    <div class="form-group">
+                        <label class="form-label">Cartão</label>
+                        <select class="form-input form-select" id="purchaseCard" required>
+                            <option value="">Selecione o cartão</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <input type="text" class="form-input" id="purchaseDescription" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Valor Total</label>
+                        <input type="number" class="form-input" id="purchaseTotalAmount" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Número de Parcelas</label>
+                        <input type="number" class="form-input" id="purchaseInstallments" min="1" max="12" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data da Compra</label>
+                        <input type="date" class="form-input" id="purchaseDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Categoria</label>
+                        <select class="form-input form-select" id="purchaseCategory" required>
+                            <option value="">Selecione a categoria</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline modal-close">Cancelar</button>
+                        <button type="submit" class="btn">Salvar Compra</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
         <!-- Modal Categories -->
         <div class="modal" id="categoriesModal">
             <div class="modal-content">
@@ -500,6 +642,7 @@
                 </form>
             </div>
         </div>
+
 
         <!-- Modal Depositar/Retirar -->
         <div class="modal" id="piggyBankTransactionModal">
