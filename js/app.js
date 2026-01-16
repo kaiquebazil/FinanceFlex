@@ -49,9 +49,119 @@ document.addEventListener("DOMContentLoaded", () => {
   // Configurar filtros
   setupFilterButtons();
 
-  // Adicione esta linha para garantir que as contas recorrentes são renderizadas
-  renderRecurringBills();
+  // Atualizar resumo mensal
+  saveMonthlySummaryToStorage();
+
+  console.log("Aplicação inicializada com sucesso!");
 });
+
+// Função para salvar categorias no localStorage
+function saveCategoriesToStorage(categories) {
+  localStorage.setItem("financeCategories", JSON.stringify(categories));
+  return categories;
+}
+
+// Atualize a função populateTransactionCategories:
+function populateTransactionCategories() {
+  // VERIFICAR SE EXISTEM CATEGORIAS
+  let categories = JSON.parse(localStorage.getItem("financeCategories"));
+
+  if (!categories || categories.length === 0) {
+    // Recriar categorias padrão se não existirem
+    categories = [
+      "Salário",
+      "Bônus",
+      "Freelance",
+      "Investimento",
+      "Presente",
+      "Moradia",
+      "Alimentação",
+      "Transporte",
+      "Saúde",
+      "Lazer",
+      "Educação",
+      "Outros",
+    ];
+    saveCategoriesToStorage(categories);
+  }
+
+  // PREENCHER SELECT DE CATEGORIAS
+  const categorySelect = document.getElementById("transactionCategory");
+  if (categorySelect) {
+    categorySelect.innerHTML =
+      '<option value="">Selecione a categoria</option>';
+    categories.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+      categorySelect.appendChild(option);
+    });
+  }
+
+  // PREENCHER SELECT DE COMPRAS NO CARTÃO
+  const purchaseCategorySelect = document.getElementById("purchaseCategory");
+  if (purchaseCategorySelect) {
+    purchaseCategorySelect.innerHTML =
+      '<option value="">Selecione a categoria</option>';
+    categories.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+      purchaseCategorySelect.appendChild(option);
+    });
+  }
+
+  // PREENCHER MODAL DE CATEGORIAS
+  const categoriesModalContent = document.getElementById(
+    "categoriesModalContent",
+  );
+  if (categoriesModalContent) {
+    if (categories.length === 0) {
+      categoriesModalContent.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="empty-text">Nenhuma categoria cadastrada</div>
+                </div>
+            `;
+    } else {
+      categoriesModalContent.innerHTML = `
+                <div class="categories-list">
+                    ${categories
+                      .map(
+                        (category, idx) => `
+                        <div class="category-item">
+                            <span>${category}</span>
+                            <button class="icon-modal delete-category-btn" data-idx="${idx}" title="Remover">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `,
+                      )
+                      .join("")}
+                </div>
+            `;
+
+      // RE-ADICIONAR EVENTOS DE REMOÇÃO
+      categoriesModalContent
+        .querySelectorAll(".delete-category-btn")
+        .forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const idx = parseInt(this.getAttribute("data-idx"));
+            let categories =
+              JSON.parse(localStorage.getItem("financeCategories")) || [];
+            if (idx >= 0 && idx < categories.length) {
+              const removed = categories.splice(idx, 1);
+              saveCategoriesToStorage(categories);
+              populateTransactionCategories(); // RECARREGAR
+              showToast(`Categoria "${removed[0]}" removida com sucesso!`);
+            }
+          });
+        });
+    }
+  }
+}
 
 function initializeAllData() {
   // Garantir que todos os dados existam
@@ -59,10 +169,26 @@ function initializeAllData() {
     initializeData();
   }
   if (!localStorage.getItem("financeCategories")) {
+    // Inicializar categorias
+    const defaultCategories = [
+      "Salário",
+      "Bônus",
+      "Freelance",
+      "Investimento",
+      "Presente",
+      "Moradia",
+      "Alimentação",
+      "Transporte",
+      "Saúde",
+      "Lazer",
+      "Educação",
+      "Outros",
+    ];
+    saveCategoriesToStorage(defaultCategories);
     populateTransactionCategories();
   }
   if (!localStorage.getItem("recurringBills")) {
-    initRecurringBills(); // Usar a função atualizada
+    initRecurringBills();
   }
   if (!localStorage.getItem("piggyBanks")) {
     initPiggyBanks();
@@ -70,6 +196,13 @@ function initializeAllData() {
   if (!localStorage.getItem("financeCreditCards")) {
     initCreditCardsSystem();
   }
+  if (!localStorage.getItem("creditCardTransactions")) {
+    saveCreditCardTransactionsToStorage([]);
+  }
+
+  // Garantir que a variável global recurringBills esteja atualizada
+  const savedBills = localStorage.getItem("recurringBills");
+  recurringBills = savedBills ? JSON.parse(savedBills) : [];
 }
 
 function setupInterface() {
@@ -401,17 +534,61 @@ function setupFilterButtons() {
   });
 }
 
+// Adicione esta função para salvar o resumo mensal
+function saveMonthlySummaryToStorage() {
+  const transactions =
+    JSON.parse(localStorage.getItem("financeTransactions")) || [];
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  const monthlyTransactions = transactions.filter((t) => {
+    const transDate = new Date(t.date);
+    return (
+      transDate.getMonth() === currentMonth &&
+      transDate.getFullYear() === currentYear
+    );
+  });
+
+  const income = monthlyTransactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const expense = monthlyTransactions
+    .filter((t) => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const savings = income - expense;
+  const savingsRate = income > 0 ? Math.round((savings / income) * 100) : 0;
+
+  const summaryData = {
+    month: currentMonth,
+    year: currentYear,
+    income: income,
+    expense: expense,
+    savings: savings,
+    savingsRate: savingsRate,
+    lastUpdated: new Date().toISOString(),
+  };
+
+  localStorage.setItem("monthlySummary", JSON.stringify(summaryData));
+  return summaryData;
+}
+
 // FUNÇÃO PARA ATUALIZAR TODAS AS INTERFACES
 function updateAllInterfaces() {
   loadAccounts();
   loadTransactions();
-  loadMonthlySummary();
+  loadMonthlySummary(); // Esta função agora salva automaticamente
   generateCalendar(currentMonth, currentYear);
   loadPiggyBanks();
   populateAccountDropdowns();
   populatePiggyBankAccountDropdowns();
   loadCreditCards();
-  renderRecurringBills(); // Adicionar esta linha
+  renderRecurringBills();
+
+  // Atualizar resumo mensal no localStorage
+  saveMonthlySummaryToStorage();
 }
 
 // Initialize sample data
@@ -697,8 +874,8 @@ function loadAccounts() {
                 <div>
                     <div class="account-name">${account.name}</div>
                     <div class="account-type">${account.type} • ${
-      account.currency
-    }</div>
+                      account.currency
+                    }</div>
                 </div>
             </div>
             <div class="account-balance ${
@@ -726,7 +903,7 @@ function loadAccounts() {
                             <p>${account.type} • ${account.currency}</p>
                             <p class="balance">${formatCurrency(
                               account.balance,
-                              account.currency
+                              account.currency,
                             )}</p>
                         </div>
                         <div class="account-actions">
@@ -737,7 +914,7 @@ function loadAccounts() {
                             </button>
                         </div>
                     </div>
-                `
+                `,
                   )
                   .join("")}
             </div>
@@ -759,7 +936,7 @@ function loadAccounts() {
 function deleteAccount(accountId) {
   if (
     !confirm(
-      "Tem certeza que deseja apagar esta conta? Todas as transações associadas serão perdidas."
+      "Tem certeza que deseja apagar esta conta? Todas as transações associadas serão perdidas.",
     )
   ) {
     return;
@@ -774,7 +951,7 @@ function deleteAccount(accountId) {
 
   // REMOVER TRANSAÇÕES ASSOCIADAS
   transactions = transactions.filter(
-    (t) => t.account !== accountId && t.toAccount !== accountId
+    (t) => t.account !== accountId && t.toAccount !== accountId,
   );
 
   // SALVAR ALTERAÇÕES
@@ -861,7 +1038,7 @@ function loadTransactions() {
                 <div class="transaction-icon">
                     <i class="fas ${getTransactionIcon(
                       transaction.type,
-                      transaction.category
+                      transaction.category,
                     )}"></i>
                 </div>
                 <div class="transaction-details">
@@ -872,7 +1049,7 @@ function loadTransactions() {
                       transaction.category
                     } • ${account ? account.name : "Unknown Account"}</div>
                     <span class="transaction-date">${new Date(
-                      transaction.date
+                      transaction.date,
                     ).toLocaleDateString("pt-BR")}</span>
                 </div>
                 <div class="transaction-amount ${
@@ -881,9 +1058,9 @@ function loadTransactions() {
                     ${
                       transaction.type === "income" ? "+" : "-"
                     }${formatCurrency(
-        transaction.amount,
-        account ? account.currency : "BRL"
-      )}
+                      transaction.amount,
+                      account ? account.currency : "BRL",
+                    )}
                 </div>
             `;
       transactionsList.appendChild(transactionItem);
@@ -892,7 +1069,7 @@ function loadTransactions() {
 
   // Adiciona as transações no modal de transações
   const transactionsModalContent = document.getElementById(
-    "transactionsModalContent"
+    "transactionsModalContent",
   );
   if (transactionsModalContent) {
     if (transactions.length === 0) {
@@ -913,14 +1090,14 @@ function loadTransactions() {
                           JSON.parse(localStorage.getItem("financeAccounts")) ||
                           [];
                         const account = accounts.find(
-                          (a) => a.id === transaction.account
+                          (a) => a.id === transaction.account,
                         );
                         return `
                             <div class="transaction-item">
                                 <div class="transaction-icon">
                                     <i class="fas ${getTransactionIcon(
                                       transaction.type,
-                                      transaction.category
+                                      transaction.category,
                                     )}"></i>
                                 </div>
                                 <div class="transaction-details">
@@ -930,10 +1107,10 @@ function loadTransactions() {
                                     <div class="transaction-category">${
                                       transaction.category
                                     } • ${
-                          account ? account.name : "Unknown Account"
-                        }</div>
+                                      account ? account.name : "Unknown Account"
+                                    }</div>
                                     <span class="transaction-date">${new Date(
-                                      transaction.date
+                                      transaction.date,
                                     ).toLocaleDateString("pt-BR")}</span>
                                 </div>
                                 <div class="transaction-amount ${
@@ -944,9 +1121,9 @@ function loadTransactions() {
                                     ${
                                       transaction.type === "income" ? "+" : "-"
                                     }${formatCurrency(
-                          transaction.amount,
-                          account ? account.currency : "BRL"
-                        )}
+                                      transaction.amount,
+                                      account ? account.currency : "BRL",
+                                    )}
                                 </div>
                                 <button class="icon-modal delete-transaction-btn" data-id="${
                                   transaction.id
@@ -976,7 +1153,7 @@ function loadTransactions() {
             let accounts =
               JSON.parse(localStorage.getItem("financeAccounts")) || [];
             const accountIndex = accounts.findIndex(
-              (a) => a.id === transactionToRemove.account
+              (a) => a.id === transactionToRemove.account,
             );
             if (accountIndex !== -1) {
               if (transactionToRemove.type === "income") {
@@ -993,15 +1170,15 @@ function loadTransactions() {
                         t.account === transactionToRemove.toAccount &&
                         t.amount === transactionToRemove.amount &&
                         t.date === transactionToRemove.date)
-                    )
+                    ),
                 );
                 localStorage.setItem(
                   "financeTransactions",
-                  JSON.stringify(transactions)
+                  JSON.stringify(transactions),
                 );
                 localStorage.setItem(
                   "financeAccounts",
-                  JSON.stringify(accounts)
+                  JSON.stringify(accounts),
                 );
                 updateAllInterfaces();
                 showToast("Transferência removida com sucesso!");
@@ -1015,7 +1192,7 @@ function loadTransactions() {
           transactions = transactions.filter((t) => t.id !== id);
           localStorage.setItem(
             "financeTransactions",
-            JSON.stringify(transactions)
+            JSON.stringify(transactions),
           );
           updateAllInterfaces();
           showToast("Transação removida com sucesso!");
@@ -1059,7 +1236,7 @@ function loadMonthlySummary() {
                     </div>
                     <div class="summary-value income">${formatCurrency(
                       income,
-                      "BRL"
+                      "BRL",
                     )}</div>
                 </div>
                 <div class="summary-item">
@@ -1069,7 +1246,7 @@ function loadMonthlySummary() {
                     </div>
                     <div class="summary-value expense">${formatCurrency(
                       expense,
-                      "BRL"
+                      "BRL",
                     )}</div>
                 </div>
                 <div class="summary-item">
@@ -1079,7 +1256,7 @@ function loadMonthlySummary() {
                     </div>
                     <div class="summary-value savings">${formatCurrency(
                       savings,
-                      "BRL"
+                      "BRL",
                     )}</div>
                 </div>
                 <div class="summary-item">
@@ -1088,8 +1265,8 @@ function loadMonthlySummary() {
                         <span>Percentagem</span>
                     </div>
                     <div class="summary-value rate">${savingsRate}% ${
-    savingsRate >= 0 ? "▲" : "▼"
-  }</div>
+                      savingsRate >= 0 ? "▲" : "▼"
+                    }</div>
                 </div>
             `;
 }
@@ -1161,8 +1338,8 @@ function generateCalendar(month, year) {
     const dayClass = isToday
       ? "calendar-day current"
       : hasEvent
-      ? "calendar-day has-event"
-      : "calendar-day";
+        ? "calendar-day has-event"
+        : "calendar-day";
 
     calendarHTML += `<div class="${dayClass}">${i}</div>`;
   }
@@ -1207,7 +1384,7 @@ function showTransactionsForDate(date) {
   filteredTransactions.forEach((t) => {
     message += `${t.type === "income" ? "+" : "-"}${formatCurrency(
       t.amount,
-      "BRL"
+      "BRL",
     )} - ${t.description} (${t.category})\n`;
   });
 
@@ -1253,7 +1430,7 @@ function populateTransactionCategories() {
 
   // PREENCHER MODAL DE CATEGORIAS - COM VERIFICAÇÃO
   const categoriesModalContent = document.getElementById(
-    "categoriesModalContent"
+    "categoriesModalContent",
   );
   if (categoriesModalContent) {
     if (categories.length === 0) {
@@ -1277,7 +1454,7 @@ function populateTransactionCategories() {
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
-                    `
+                    `,
                       )
                       .join("")}
                 </div>
@@ -1295,7 +1472,7 @@ function populateTransactionCategories() {
               const removed = categories.splice(idx, 1);
               localStorage.setItem(
                 "financeCategories",
-                JSON.stringify(categories)
+                JSON.stringify(categories),
               );
               populateTransactionCategories(); // RECARREGAR
               showToast(`Categoria "${removed[0]}" removida com sucesso!`);
@@ -1448,7 +1625,7 @@ function getTransactionIcon(type, category) {
 }
 
 // CONTAS RECORRENTES
-let recurringBills = JSON.parse(localStorage.getItem('recurringBills')) || [];
+let recurringBills = JSON.parse(localStorage.getItem("recurringBills")) || [];
 
 // Atualize esta função:
 function initRecurringBills() {
@@ -1548,8 +1725,8 @@ function renderRecurringBills() {
                   bill.id
                 }" class="bill-checkbox" ${bill.checked ? "checked" : ""}>
                 <label for="check-${bill.id}" class="bill-name">${
-      bill.name
-    }</label>
+                  bill.name
+                }</label>
             </div>
             <div class="bill-actions">
                 <button class="icon-modal bill-action-btn delete-bill" data-id="${
@@ -1603,8 +1780,8 @@ function renderRecurringBills() {
                   bill.id
                 }" class="bill-checkbox" ${bill.checked ? "checked" : ""}>
                 <label for="check-${bill.id}" class="bill-name">${
-      bill.name
-    }</label>
+                  bill.name
+                }</label>
             </div>
             <div class="bill-actions">
                 <button class="icon-modal bill-action-btn delete-bill" data-id="${
@@ -1672,18 +1849,31 @@ function toggleBillChecked(billId) {
 function addCategory() {
   const addNewcategotia = document.getElementById("newcategotiaName");
   const newCategory = addNewcategotia ? addNewcategotia.value.trim() : "";
+
   if (newCategory) {
     let categories =
       JSON.parse(localStorage.getItem("financeCategories")) || [];
-    if (!categories.includes(newCategory)) {
-      categories.push(newCategory);
-      localStorage.setItem("financeCategories", JSON.stringify(categories));
-      populateTransactionCategories();
-      showToast("Categoria adicionada com sucesso!");
-    } else {
+
+    // Verificar se a categoria já existe
+    if (categories.includes(newCategory)) {
       showToast("Categoria já existe!", "error");
+      return;
     }
+
+    // Adicionar nova categoria
+    categories.push(newCategory);
+
+    // Salvar no localStorage
+    saveCategoriesToStorage(categories);
+
+    // Atualizar interface
+    populateTransactionCategories();
+
+    // Limpar campo e mostrar mensagem
     addNewcategotia.value = "";
+    showToast("Categoria adicionada com sucesso!");
+  } else {
+    showToast("Digite um nome para a categoria!", "error");
   }
 }
 
@@ -1715,7 +1905,7 @@ function loadTransactionCategories() {
 
   // Extrair categorias únicas
   const categories = [...new Set(transactions.map((t) => t.category))].filter(
-    Boolean
+    Boolean,
   );
 
   // Limpar e preencher dropdown
@@ -1834,7 +2024,7 @@ function renderTransactions(transactions, accounts) {
 
   // Renderizar cada categoria
   for (const [category, categoryTransactions] of Object.entries(
-    transactionsByCategory
+    transactionsByCategory,
   )) {
     const categoryElement = document.createElement("div");
     categoryElement.className = "category-group";
@@ -1852,9 +2042,9 @@ function renderTransactions(transactions, accounts) {
                   categoryTotal >= 0 ? "income" : "expense"
                 }">
                     ${categoryTotal >= 0 ? "+" : ""}${formatCurrency(
-      Math.abs(categoryTotal),
-      "BRL"
-    )}
+                      Math.abs(categoryTotal),
+                      "BRL",
+                    )}
                 </div>
             </div>
         `;
@@ -1864,7 +2054,7 @@ function renderTransactions(transactions, accounts) {
     categoryTransactions.forEach((transaction) => {
       const account = accounts.find((a) => a.id === transaction.account);
       transactionsList.appendChild(
-        createTransactionElement(transaction, account)
+        createTransactionElement(transaction, account),
       );
     });
 
@@ -1881,14 +2071,14 @@ function createTransactionElement(transaction, account) {
         <div class="transaction-icon ${transaction.type}">
             <i class="fas ${getTransactionIcon(
               transaction.type,
-              transaction.category
+              transaction.category,
             )}"></i>
         </div>
         <div class="transaction-details">
             <div class="transaction-name">${transaction.description}</div>
             <div class="transaction-info">
                 <span class="transaction-date">${formatDate(
-                  transaction.date
+                  transaction.date,
                 )}</span>
                 <span class="transaction-account">${
                   account?.name || "Conta desconhecida"
@@ -1899,9 +2089,9 @@ function createTransactionElement(transaction, account) {
           transaction.type === "income" ? "positive" : "negative"
         }">
             ${transaction.type === "income" ? "+" : "-"}${formatCurrency(
-    transaction.amount,
-    account?.currency || "BRL"
-  )}
+              transaction.amount,
+              account?.currency || "BRL",
+            )}
         </div>
     `;
 
@@ -1963,11 +2153,11 @@ function loadPiggyBanks() {
   piggyBanks.forEach((piggy) => {
     const percentage = Math.min(
       Math.round((piggy.current / piggy.target) * 100),
-      100
+      100,
     );
     const daysLeft = piggy.targetDate
       ? Math.ceil(
-          (new Date(piggy.targetDate) - new Date()) / (1000 * 60 * 60 * 24)
+          (new Date(piggy.targetDate) - new Date()) / (1000 * 60 * 60 * 24),
         )
       : null;
 
@@ -1991,17 +2181,17 @@ function loadPiggyBanks() {
             </div>
             <div class="piggy-bank-progress-container">
                 <div class="piggy-bank-progress-bar" style="width: ${percentage}%; background-color: ${
-      piggy.color
-    }"></div>
+                  piggy.color
+                }"></div>
             </div>
             <div class="piggy-bank-amounts">
                 <span class="piggy-bank-current">${formatCurrency(
                   piggy.current,
-                  "BRL"
+                  "BRL",
                 )}</span>
                 <span class="piggy-bank-target">${formatCurrency(
                   piggy.target,
-                  "BRL"
+                  "BRL",
                 )}</span>
             </div>
             <div class="piggy-bank-percentage">${percentage}% completo</div>
@@ -2147,7 +2337,7 @@ function savePiggyBank(e) {
   document.getElementById("piggyBankModal").classList.remove("active");
   loadPiggyBanks();
   showToast(
-    `Cofrinho ${currentPiggyBankId ? "atualizado" : "criado"} com sucesso!`
+    `Cofrinho ${currentPiggyBankId ? "atualizado" : "criado"} com sucesso!`,
   );
 }
 
@@ -2170,7 +2360,7 @@ function handlePiggyBankTransaction(e) {
   const operationType = document.getElementById("piggyBankOperationType").value;
   const amount = parseFloat(document.getElementById("piggyBankAmount").value);
   const accountId = document.getElementById(
-    "piggyBankTransactionAccount"
+    "piggyBankTransactionAccount",
   ).value;
   const date = document.getElementById("piggyBankTransactionDate").value;
 
@@ -2258,7 +2448,7 @@ function populatePiggyBankAccountDropdowns() {
   const accounts = JSON.parse(localStorage.getItem("financeAccounts")) || [];
   const piggyBankAccountSelect = document.getElementById("piggyBankAccount");
   const piggyBankTransactionAccountSelect = document.getElementById(
-    "piggyBankTransactionAccount"
+    "piggyBankTransactionAccount",
   );
 
   if (piggyBankAccountSelect) {
@@ -2276,7 +2466,7 @@ function populatePiggyBankAccountDropdowns() {
       option.value = account.id;
       option.textContent = `${account.name} (${formatCurrency(
         account.balance,
-        account.currency
+        account.currency,
       )})`;
       piggyBankAccountSelect.appendChild(option);
     }
@@ -2286,17 +2476,11 @@ function populatePiggyBankAccountDropdowns() {
       option2.value = account.id;
       option2.textContent = `${account.name} (${formatCurrency(
         account.balance,
-        account.currency
+        account.currency,
       )})`;
       piggyBankTransactionAccountSelect.appendChild(option2);
     }
   });
-}
-
-// CARTÕES DE CRÉDITO
-function initCreditCardsSystem() {
-  initCreditCards();
-  loadCreditCards();
 }
 
 function initCreditCards() {
@@ -2321,7 +2505,7 @@ function initCreditCards() {
     ];
     localStorage.setItem(
       "financeCreditCards",
-      JSON.stringify(defaultCreditCards)
+      JSON.stringify(defaultCreditCards),
     );
   }
 
@@ -2364,17 +2548,17 @@ function loadCreditCards() {
 
   creditCards.forEach((card) => {
     const cardTransactions = transactions.filter(
-      (t) => t.cardId === card.id && !t.installments.every((i) => i.paid)
+      (t) => t.cardId === card.id && !t.installments.every((i) => i.paid),
     );
     const totalSpent = cardTransactions.reduce((sum, transaction) => {
       const unpaidInstallments = transaction.installments.filter(
-        (i) => !i.paid
+        (i) => !i.paid,
       );
       return (
         sum +
         unpaidInstallments.reduce(
           (installmentSum, installment) => installmentSum + installment.amount,
-          0
+          0,
         )
       );
     }, 0);
@@ -2403,7 +2587,7 @@ function loadCreditCards() {
                     <span class="label">Limite total</span>
                     <span class="value">${formatCurrency(
                       card.limit,
-                      "BRL"
+                      "BRL",
                     )}</span>
                 </div>
             </div>
@@ -2416,13 +2600,13 @@ function loadCreditCards() {
                     <div>
                         <span class="used">Usado: ${formatCurrency(
                           totalSpent,
-                          "BRL"
+                          "BRL",
                         )}</span>
                     </div>
                     <div>
                         <span class="available">Disponível: ${formatCurrency(
                           availableLimit,
-                          "BRL"
+                          "BRL",
                         )}</span>
                     </div>
                 </div>
@@ -2504,7 +2688,7 @@ function showCreditCardsModal() {
                         <div class="credit-card-details">
                             <div>Limite: ${formatCurrency(
                               card.limit,
-                              "BRL"
+                              "BRL",
                             )}</div>
                             <div>Vencimento: dia ${card.dueDate}</div>
                             <div>Fechamento: dia ${card.closingDate}</div>
@@ -2522,7 +2706,7 @@ function showCreditCardsModal() {
                             </button>
                         </div>
                     </div>
-                `
+                `,
                   )
                   .join("")}
             </div>
@@ -2552,7 +2736,7 @@ function saveCreditCard(e) {
   const limit = parseFloat(document.getElementById("creditCardLimit").value);
   const dueDate = parseInt(document.getElementById("creditCardDueDate").value);
   const closingDate = parseInt(
-    document.getElementById("creditCardClosingDate").value
+    document.getElementById("creditCardClosingDate").value,
   );
   const color = document.getElementById("creditCardColor").value;
 
@@ -2583,12 +2767,59 @@ function saveCreditCard(e) {
     creditCards.push(newCard);
   }
 
-  localStorage.setItem("financeCreditCards", JSON.stringify(creditCards));
+  // Salvar no localStorage
+  saveCreditCardsToStorage(creditCards);
+
   document.getElementById("creditCardModal").classList.remove("active");
   loadCreditCards();
   showToast(
-    `Cartão ${currentCreditCardId ? "atualizado" : "criado"} com sucesso!`
+    `Cartão ${currentCreditCardId ? "atualizado" : "criado"} com sucesso!`,
   );
+}
+
+// Função para salvar cartões no localStorage
+function saveCreditCardsToStorage(creditCards) {
+  localStorage.setItem("financeCreditCards", JSON.stringify(creditCards));
+  return creditCards;
+}
+
+// Função para salvar transações de cartão
+function saveCreditCardTransactionsToStorage(transactions) {
+  localStorage.setItem("creditCardTransactions", JSON.stringify(transactions));
+  return transactions;
+}
+
+// Atualize a função initCreditCardsSystem:
+function initCreditCardsSystem() {
+  if (!localStorage.getItem("financeCreditCards")) {
+    const defaultCreditCards = [
+      {
+        id: "card1",
+        name: "Nubank",
+        limit: 5000,
+        dueDate: 10,
+        closingDate: 5,
+        color: "#8A05BE",
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: "card2",
+        name: "PicPay",
+        limit: 3000,
+        dueDate: 8,
+        closingDate: 3,
+        color: "#21BA72",
+        createdAt: new Date().toISOString(),
+      },
+    ];
+    saveCreditCardsToStorage(defaultCreditCards);
+  }
+
+  if (!localStorage.getItem("creditCardTransactions")) {
+    saveCreditCardTransactionsToStorage([]);
+  }
+
+  loadCreditCards();
 }
 
 // Adicionar compra parcelada
@@ -2642,10 +2873,10 @@ function saveCreditCardPurchase(e) {
   const cardId = document.getElementById("purchaseCard").value;
   const description = document.getElementById("purchaseDescription").value;
   const totalAmount = parseFloat(
-    document.getElementById("purchaseTotalAmount").value
+    document.getElementById("purchaseTotalAmount").value,
   );
   const installmentsCount = parseInt(
-    document.getElementById("purchaseInstallments").value
+    document.getElementById("purchaseInstallments").value,
   );
   const purchaseDate = new Date(document.getElementById("purchaseDate").value);
   const category = document.getElementById("purchaseCategory").value;
@@ -2672,7 +2903,7 @@ function saveCreditCardPurchase(e) {
     cardId,
     description,
     totalAmount,
-    installments: installmentsCount,
+    installmentsCount,
     installmentValue,
     purchaseDate: purchaseDate.toISOString().split("T")[0],
     firstDueDate: installments[0].dueDate,
@@ -2682,7 +2913,9 @@ function saveCreditCardPurchase(e) {
   };
 
   transactions.push(newTransaction);
-  localStorage.setItem("creditCardTransactions", JSON.stringify(transactions));
+
+  // Salvar no localStorage
+  saveCreditCardTransactionsToStorage(transactions);
 
   document.getElementById("creditCardPurchaseModal").classList.remove("active");
   document.getElementById("creditCardPurchaseForm").reset();
@@ -2707,7 +2940,7 @@ function showCardDetails(cardId) {
       sum +
       unpaidInstallments.reduce(
         (installmentSum, installment) => installmentSum + installment.amount,
-        0
+        0,
       )
     );
   }, 0);
@@ -2720,7 +2953,7 @@ function showCardDetails(cardId) {
         Limite: ${formatCurrency(card.limit, "BRL")}<br>
         Utilizado: ${formatCurrency(
           totalSpent,
-          "BRL"
+          "BRL",
         )} (${usagePercentage.toFixed(1)}%)<br>
         Disponível: ${formatCurrency(availableLimit, "BRL")}<br>
         Vencimento: dia ${card.dueDate}<br>
@@ -2752,45 +2985,63 @@ function lightenColor(color, percent) {
 
 // BACKUP E EXPORTAÇÃO
 function exportData() {
-  // Coletar todos os dados do localStorage
-  const appData = {
-    financeAccounts: JSON.parse(
-      localStorage.getItem("financeAccounts") || "[]"
-    ),
-    financeTransactions: JSON.parse(
-      localStorage.getItem("financeTransactions") || "[]"
-    ),
-    financeCreditCards: JSON.parse(
-      localStorage.getItem("financeCreditCards") || "[]"
-    ),
-    recurringBills: JSON.parse(localStorage.getItem("recurringBills") || "[]"), // Adicionar esta linha
-    piggyBanks: JSON.parse(localStorage.getItem("piggyBanks") || "[]"),
-    financeCategories: JSON.parse(
-      localStorage.getItem("financeCategories") || "[]"
-    ),
-    creditCardTransactions: JSON.parse(
-      localStorage.getItem("creditCardTransactions") || "[]"
-    ),
-    exportDate: new Date().toISOString(),
-  };
+  try {
+    // Coletar TODOS os dados do localStorage
+    const appData = {
+      // Dados principais
+      financeAccounts: JSON.parse(
+        localStorage.getItem("financeAccounts") || "[]",
+      ),
+      financeTransactions: JSON.parse(
+        localStorage.getItem("financeTransactions") || "[]",
+      ),
+      financeCategories: JSON.parse(
+        localStorage.getItem("financeCategories") || "[]",
+      ),
 
-  // Criar arquivo JSON
-  const dataStr = JSON.stringify(appData, null, 2);
-  const dataUri =
-    "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+      // Contas recorrentes
+      recurringBills: JSON.parse(
+        localStorage.getItem("recurringBills") || "[]",
+      ),
 
-  // Criar link de download
-  const exportFileDefaultName = `finance-flex-backup-${
-    new Date().toISOString().split("T")[0]
-  }.json`;
-  const linkElement = document.createElement("a");
-  linkElement.setAttribute("href", dataUri);
-  linkElement.setAttribute("download", exportFileDefaultName);
-  document.body.appendChild(linkElement);
-  linkElement.click();
-  document.body.removeChild(linkElement);
+      // Cofrinhos
+      piggyBanks: JSON.parse(localStorage.getItem("piggyBanks") || "[]"),
 
-  showToast("Backup exportado com sucesso!", "success");
+      // Cartões de crédito
+      financeCreditCards: JSON.parse(
+        localStorage.getItem("financeCreditCards") || "[]",
+      ),
+      creditCardTransactions: JSON.parse(
+        localStorage.getItem("creditCardTransactions") || "[]",
+      ),
+
+      // Configurações e preferências
+      valuesHidden: localStorage.getItem("valuesHidden") || "false",
+
+      // Metadados
+      exportDate: new Date().toISOString(),
+      appVersion: "1.0.0",
+    };
+
+    // Criar arquivo JSON
+    const dataStr = JSON.stringify(appData, null, 2);
+    const dataUri =
+      "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+    // Criar link de download
+    const exportFileDefaultName = `finance-flex-backup-${new Date().toISOString().split("T")[0]}.json`;
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
+
+    showToast("Backup exportado com sucesso!", "success");
+  } catch (error) {
+    console.error("Erro ao exportar dados:", error);
+    showToast("Erro ao exportar backup: " + error.message, "error");
+  }
 }
 
 function importData(event) {
@@ -2802,38 +3053,79 @@ function importData(event) {
     try {
       const appData = JSON.parse(e.target.result);
 
-      // Verificar se o arquivo é válido
-      if (!appData.financeAccounts || !appData.financeTransactions) {
-        throw new Error("Arquivo de backup inválido");
+      // Verificar versão mínima do arquivo
+      if (!appData.financeAccounts) {
+        throw new Error("Arquivo de backup inválido ou incompatível");
       }
 
       // Confirmar antes de sobrescrever dados
       if (confirm("Isso substituirá todos os seus dados atuais. Continuar?")) {
-        // Salvar dados no localStorage
+        // Salvar todos os dados no localStorage
         localStorage.setItem(
           "financeAccounts",
-          JSON.stringify(appData.financeAccounts)
+          JSON.stringify(appData.financeAccounts || []),
         );
         localStorage.setItem(
           "financeTransactions",
-          JSON.stringify(appData.financeTransactions)
+          JSON.stringify(appData.financeTransactions || []),
+        );
+        localStorage.setItem(
+          "financeCategories",
+          JSON.stringify(appData.financeCategories || []),
         );
 
-        if (appData.financeCreditCards) {
-          localStorage.setItem(
-            "financeCreditCards",
-            JSON.stringify(appData.financeCreditCards)
-          );
-        }
-
+        // Contas recorrentes (mantenha compatibilidade com versões antigas)
         if (appData.recurringBills) {
           localStorage.setItem(
             "recurringBills",
-            JSON.stringify(appData.recurringBills)
+            JSON.stringify(appData.recurringBills),
           );
+        } else {
+          localStorage.removeItem("recurringBills");
         }
 
-        // ... resto do código permanece igual
+        // Cofrinhos
+        if (appData.piggyBanks) {
+          localStorage.setItem(
+            "piggyBanks",
+            JSON.stringify(appData.piggyBanks),
+          );
+        } else {
+          localStorage.removeItem("piggyBanks");
+        }
+
+        // Cartões de crédito
+        if (appData.financeCreditCards) {
+          localStorage.setItem(
+            "financeCreditCards",
+            JSON.stringify(appData.financeCreditCards),
+          );
+        } else {
+          localStorage.removeItem("financeCreditCards");
+        }
+
+        if (appData.creditCardTransactions) {
+          localStorage.setItem(
+            "creditCardTransactions",
+            JSON.stringify(appData.creditCardTransactions),
+          );
+        } else {
+          localStorage.removeItem("creditCardTransactions");
+        }
+
+        // Configurações
+        if (appData.valuesHidden) {
+          localStorage.setItem("valuesHidden", appData.valuesHidden);
+        } else {
+          localStorage.removeItem("valuesHidden");
+        }
+
+        showToast("Dados importados com sucesso!", "success");
+
+        // Recarregar a aplicação
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
       }
     } catch (error) {
       console.error("Erro ao importar dados:", error);
@@ -2850,18 +3142,26 @@ function importData(event) {
 const resetarDados = () => {
   if (
     confirm(
-      "Você tem certeza que deseja reiniciar todos os dados? Esta ação não pode ser desfeita."
+      "Você tem certeza que deseja reiniciar todos os dados? Esta ação não pode ser desfeita.",
     )
   ) {
+    // Limpar todos os dados
     localStorage.removeItem("financeAccounts");
     localStorage.removeItem("financeTransactions");
     localStorage.removeItem("financeCategories");
-    localStorage.removeItem("recurringBills"); // Adicionar esta linha
+    localStorage.removeItem("recurringBills");
     localStorage.removeItem("piggyBanks");
     localStorage.removeItem("financeCreditCards");
     localStorage.removeItem("creditCardTransactions");
+    localStorage.removeItem("monthlySummary");
+    localStorage.removeItem("valuesHidden");
+
     showToast("Todos os dados foram reiniciados com sucesso!", "success");
-    location.reload();
+
+    // Recarregar a página
+    setTimeout(() => {
+      location.reload();
+    }, 1500);
   }
 };
 
@@ -2884,31 +3184,31 @@ function debugApp() {
   console.log("=== DEBUG FINANCE FLEX ===");
   console.log(
     "Accounts:",
-    JSON.parse(localStorage.getItem("financeAccounts") || "[]")
+    JSON.parse(localStorage.getItem("financeAccounts") || "[]"),
   );
   console.log(
     "Transactions:",
-    JSON.parse(localStorage.getItem("financeTransactions") || "[]")
+    JSON.parse(localStorage.getItem("financeTransactions") || "[]"),
   );
   console.log(
     "Categories:",
-    JSON.parse(localStorage.getItem("financeCategories") || "[]")
+    JSON.parse(localStorage.getItem("financeCategories") || "[]"),
   );
   console.log(
     "Credit Cards:",
-    JSON.parse(localStorage.getItem("financeCreditCards") || "[]")
+    JSON.parse(localStorage.getItem("financeCreditCards") || "[]"),
   );
   console.log(
     "Piggy Banks:",
-    JSON.parse(localStorage.getItem("piggyBanks") || "[]")
+    JSON.parse(localStorage.getItem("piggyBanks") || "[]"),
   );
   console.log(
     "Recurring Bills:",
-    JSON.parse(localStorage.getItem("recurringBills") || "[]")
+    JSON.parse(localStorage.getItem("recurringBills") || "[]"),
   );
   console.log(
     "Credit Card Transactions:",
-    JSON.parse(localStorage.getItem("creditCardTransactions") || "[]")
+    JSON.parse(localStorage.getItem("creditCardTransactions") || "[]"),
   );
 }
 
