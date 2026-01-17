@@ -34,6 +34,9 @@ let currentCategory = "all";
 let currentCreditCardId = null;
 let currentPiggyBankId = null;
 
+// Contas recorrentes
+let recurringBills = [];
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Inicializando aplicação...");
 
@@ -49,8 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Configurar filtros
   setupFilterButtons();
 
+  // Carregar categorias de transação
+  loadTransactionCategories();
+
   // Atualizar resumo mensal
   saveMonthlySummaryToStorage();
+
+  // Carregar transações filtradas inicialmente
+  loadFilteredTransactions();
 
   console.log("Aplicação inicializada com sucesso!");
 });
@@ -579,6 +588,7 @@ function saveMonthlySummaryToStorage() {
 function updateAllInterfaces() {
   loadAccounts();
   loadTransactions();
+  loadFilteredTransactions(); // Adicionado para atualizar transações filtradas
   loadMonthlySummary(); // Esta função agora salva automaticamente
   generateCalendar(currentMonth, currentYear);
   loadPiggyBanks();
@@ -1625,7 +1635,6 @@ function getTransactionIcon(type, category) {
 }
 
 // CONTAS RECORRENTES
-let recurringBills = JSON.parse(localStorage.getItem("recurringBills")) || [];
 
 // Atualize esta função:
 function initRecurringBills() {
@@ -1753,97 +1762,6 @@ function renderRecurringBills() {
       removeBill(billId);
     });
   });
-}
-
-function renderRecurringBills() {
-  const billsList = document.getElementById("recurringBillsList");
-  if (!billsList) return;
-
-  billsList.innerHTML = "";
-
-  if (recurringBills.length === 0) {
-    billsList.innerHTML = `
-            <div class="empty-recurring">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <p>Nenhuma conta frequente cadastrada</p>
-            </div>
-        `;
-    return;
-  }
-
-  recurringBills.forEach((bill) => {
-    const billElement = document.createElement("div");
-    billElement.className = "bill-item";
-    billElement.innerHTML = `
-            <div class="bill-info">
-                <input type="checkbox" id="check-${
-                  bill.id
-                }" class="bill-checkbox" ${bill.checked ? "checked" : ""}>
-                <label for="check-${bill.id}" class="bill-name">${
-                  bill.name
-                }</label>
-            </div>
-            <div class="bill-actions">
-                <button class="icon-modal bill-action-btn delete-bill" data-id="${
-                  bill.id
-                }">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-    billsList.appendChild(billElement);
-  });
-
-  // Adicionar eventos
-  document.querySelectorAll(".bill-checkbox").forEach((checkbox) => {
-    checkbox.addEventListener("change", function () {
-      const billId = this.id.replace("check-", "");
-      toggleBillChecked(billId);
-    });
-  });
-
-  document.querySelectorAll(".delete-bill").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const billId = this.getAttribute("data-id");
-      removeBill(billId);
-    });
-  });
-}
-
-function addBill() {
-  const input = document.getElementById("newBillName");
-  const billName = input.value.trim();
-
-  if (billName) {
-    const newBill = {
-      id: "bill" + Date.now(),
-      name: billName,
-      checked: false,
-    };
-
-    recurringBills.push(newBill);
-    saveRecurringBills();
-    renderRecurringBills();
-    input.value = "";
-    showToast("Conta adicionada com sucesso!");
-  }
-}
-
-function removeBill(billId) {
-  recurringBills = recurringBills.filter((bill) => bill.id !== billId);
-  saveRecurringBills();
-  renderRecurringBills();
-  showToast("Conta removida com sucesso!");
-}
-
-function toggleBillChecked(billId) {
-  recurringBills = recurringBills.map((bill) => {
-    if (bill.id === billId) {
-      return { ...bill, checked: !bill.checked };
-    }
-    return bill;
-  });
-  saveRecurringBills();
 }
 
 function addCategory() {
@@ -2551,9 +2469,7 @@ function loadCreditCards() {
       (t) => t.cardId === card.id && !t.installments.every((i) => i.paid),
     );
     const totalSpent = cardTransactions.reduce((sum, transaction) => {
-      const unpaidInstallments = transaction.installments.filter(
-        (i) => !i.paid,
-      );
+      const unpaidInstallments = transaction.installments.filter((i) => !i.paid);
       return (
         sum +
         unpaidInstallments.reduce(
