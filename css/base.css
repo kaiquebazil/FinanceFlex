@@ -1,0 +1,93 @@
+/* base.css - Reset, variáveis e estilos base */
+:root {
+    /* Cores principais */
+    --primary: #7c4dff;
+    --primary-light: #b47cff;
+    --primary-dark: #3f1dcb;
+    --secondary: #00e5ff;
+    
+    /* Cores de fundo */
+    --dark: #121212;
+    --darker: #0a0a0a;
+    --dark-light: #1e1e1e;
+    
+    /* Cores de texto */
+    --light: #ffffff;
+    --light-dim: #b3b3b3;
+    
+    /* Cores de status */
+    --success: #00c853;
+    --danger: #ff3d00;
+    --warning: #ffab00;
+    --info: #00b0ff;
+    
+    /* Bordas e sombras */
+    --border-radius: 12px;
+    --border-radius-sm: 6px;
+    --shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --glass: rgba(30, 30, 30, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    
+    /* Transições */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset e estilos base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@supports (font-variation-settings: normal) {
+    * {
+        font-family: 'Inter var', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+}
+
+html, body {
+    overflow-x: hidden;
+    height: 100%;
+}
+
+body {
+    background-color: var(--darker);
+    color: var(--light);
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+        radial-gradient(at 80% 20%, rgba(124, 77, 255, 0.1) 0px, transparent 50%),
+        radial-gradient(at 20% 80%, rgba(0, 229, 255, 0.1) 0px, transparent 50%);
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Seleção de texto */
+::selection {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Foco acessível */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}

@@ -1,0 +1,189 @@
+/* style.css - Arquivo principal que importa todos */
+@import url('base.css');
+@import url('layout.css');
+@import url('components.css');
+@import url('modules.css');
+@import url('utilities.css');
+@import url('animations.css');
+@import url('responsive.css');
+
+/* Estilos específicos que não se encaixam nos outros arquivos */
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--light-dim);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: var(--dark-light);
+}
+
+.empty-text {
+    margin-bottom: 20px;
+}
+
+.empty-credit-cards,
+.empty-piggy-banks {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--light-dim);
+}
+
+.empty-credit-cards i,
+.empty-piggy-banks i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: var(--dark-light);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Backup Section */
+.backup-section {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Icon Buttons */
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--light-dim);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    margin-left: 8px;
+}
+
+.icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light);
+}
+
+/* Modal de Confirmação */
+.confirmation-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.confirmation-dialog.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.confirmation-dialog .dialog-content {
+    background-color: var(--dark);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+    transform: translateY(20px);
+    transition: var(--transition);
+    border: 1px solid var(--glass-border);
+}
+
+.confirmation-dialog.active .dialog-content {
+    transform: translateY(0);
+}
+
+.confirmation-dialog h3 {
+    margin-top: 0;
+    color: var(--light);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.confirmation-dialog p {
+    color: var(--light-dim);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.confirmation-dialog .dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Ajuste para checkbox customizado */
+.bill-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--primary-light);
+    border-radius: 4px;
+    background-color: var(--dark-light);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    margin-right: 12px;
+}
+
+.bill-checkbox:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.bill-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Scroll para lista de contas recorrentes */
+#recurringBillsList,
+#recurringBillsList1 {
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-right: -10px;
+}
+
+/* Corrigir bug de scroll em iOS */
+@supports (-webkit-touch-callout: none) {
+    .modal {
+        position: fixed;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .modal-body {
+        -webkit-overflow-scrolling: touch;
+    }
+}

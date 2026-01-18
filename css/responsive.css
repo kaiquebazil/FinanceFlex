@@ -1,0 +1,247 @@
+/* responsive.css - Media queries responsivas */
+
+/* Responsivo para modais */
+@media (max-width: 768px) {
+    /* MODAIS EM MOBILE */
+    .modal {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: 40px;
+    }
+    
+    .modal-content {
+        max-width: 95%;
+        max-height: 80vh;
+        padding: 20px;
+        margin: 0 auto;
+    }
+    
+    .modal-header {
+        margin-bottom: 15px;
+    }
+    
+    .modal-title {
+        font-size: 18px;
+    }
+    
+    .modal-close {
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+    }
+    
+    /* Modais específicos em mobile */
+    .modal-nav .modal-content {
+        max-width: 95%;
+        max-height: 80vh;
+    }
+    
+    #creditCardsModal .modal-content {
+        max-width: 95%;
+    }
+    
+    #transactionsModal .modal-content {
+        max-width: 95%;
+    }
+    
+    /* Ajuste para forms em mobile */
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-input,
+    .form-select {
+        padding: 10px 12px;
+        font-size: 16px;
+    }
+    
+    .form-actions {
+        margin-top: 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+        margin: 0;
+    }
+    
+    /* Tabs em mobile */
+    .tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+    
+    .tab {
+        padding: 8px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* Filtros em mobile */
+    .filter-buttons {
+        gap: 6px;
+    }
+    
+    .filter-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+    
+    /* Hamburger menu em mobile */
+    .hamburger-btn {
+        display: block;
+    }
+    
+    .nav-items {
+        display: none;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    /* FAB em mobile */
+    .fab-container {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .fab-button {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .fab-button::after {
+        content: 'Adicionar';
+        position: absolute;
+        right: 70px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--dark-light);
+        color: var(--light);
+        padding: 6px 12px;
+        border-radius: var(--border-radius-sm);
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+    
+    .fab-button:hover::after {
+        opacity: 1;
+    }
+    
+    /* Grids em mobile */
+    .summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .calendar-day {
+        padding: 8px 0;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* MODAIS EM TELAS PEQUENAS */
+    .modal {
+        padding: 5px;
+        padding-top: 20px;
+    }
+    
+    .modal-content {
+        max-width: 100%;
+        max-height: 85vh;
+        padding: 15px;
+        border-radius: var(--border-radius);
+    }
+    
+    .modal-header {
+        padding: 0;
+        margin-bottom: 15px;
+    }
+    
+    .modal-title {
+        font-size: 16px;
+    }
+    
+    .modal-body {
+        padding: 0;
+    }
+    
+    /* Cards em mobile pequeno */
+    .card {
+        padding: 10px;
+    }
+    
+    /* Toast em mobile */
+    .toasts {
+        max-width: calc(100% - 40px);
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+    }
+    
+    /* Summary grid em mobile pequeno */
+    .summary-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    /* MODAIS EM TELAS MUITO PEQUENAS */
+    .modal-content {
+        padding: 12px;
+    }
+    
+    .modal-header {
+        margin-bottom: 12px;
+    }
+    
+    .modal-title {
+        font-size: 15px;
+    }
+    
+    .form-input,
+    .form-select {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    /* Mobile menu em telas muito pequenas */
+    .mobile-menu {
+        width: 220px;
+        padding: 60px 15px 15px;
+    }
+    
+    .sidebar-link {
+        padding: 8px 0;
+        font-size: 14px;
+    }
+}
+
+/* Desktop específico */
+@media (min-width: 1020px) {
+    .fab-container {
+        display: none;
+    }
+}
+
+/* Ajuste para modais em desktop grande */
+@media (min-width: 1200px) {
+    .modal-nav .modal-content {
+        max-width: 1000px;
+    }
+    
+    #creditCardsModal .modal-content {
+        max-width: 1000px;
+    }
+}
