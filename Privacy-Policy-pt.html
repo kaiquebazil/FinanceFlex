@@ -1,238 +1,318 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Política de Privacidade - FinanceFlex</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="img/favicon.svg" type="image/x-icon" />
+
+    <link rel="stylesheet" href="styles.css" />
     <style>
       /* Reset e configurações básicas */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-}
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+      }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-header {
-    text-align: center;
-    padding: 20px 0;
-    border-bottom: 1px solid #eee;
-}
+      header {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+      }
 
-header h1 {
-    color: #2c3e50;
-}
+      header h1 {
+        color: #2c3e50;
+      }
 
-main {
-    padding: 20px 0;
-}
+      main {
+        padding: 20px 0;
+      }
 
-section {
-    margin-bottom: 30px;
-}
+      section {
+        margin-bottom: 30px;
+      }
 
-section h2 {
-    color: #3498db;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 5px;
-}
+      section h2 {
+        color: #3498db;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+      }
 
-ul {
-    margin-left: 20px;
-}
+      ul {
+        margin-left: 20px;
+      }
 
-li {
-    margin-bottom: 10px;
-}
+      li {
+        margin-bottom: 10px;
+      }
 
-footer {
-    text-align: center;
-    padding: 20px 0;
-    border-top: 1px solid #eee;
-    color: #7f8c8d;
-}
+      footer {
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid #eee;
+        color: #7f8c8d;
+      }
 
-.divider {
-    border: 0;
-    height: 1px;
-    background: #ddd;
-    margin: 40px 0;
-}
+      .divider {
+        border: 0;
+        height: 1px;
+        background: #ddd;
+        margin: 40px 0;
+      }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
-    }
-}
-
+      /* Responsividade */
+      @media (max-width: 768px) {
+        .container {
+          padding: 10px;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <!-- Versão em Português -->
-        <header>
-            <h1>Política de Privacidade do FinanceFlex</h1>
-            <p>Versão em Português (Brasil)</p>
-            <p>Última atualização: 18 de Março de 2026</p>
-        </header>
+      <!-- Versão em Português -->
+      <header>
+        <h1>Política de Privacidade do FinanceFlex</h1>
+        <p>Versão em Português (Brasil)</p>
+        <p>Última atualização: 18 de Março de 2026</p>
+      </header>
 
-        <main>
-            <section>
-                <p>
-                    Esta Política de Privacidade descreve como o aplicativo FinanceFlex ("nós", "nosso", "o Aplicativo") coleta, usa e protege suas informações pessoais e financeiras. Ao utilizar o FinanceFlex, você concorda com a coleta e uso de informações de acordo com esta política.
-                </p>
-            </section>
+      <main>
+        <section>
+          <p>
+            Esta Política de Privacidade descreve como o aplicativo FinanceFlex
+            ("nós", "nosso", "o Aplicativo") coleta, usa e protege suas
+            informações pessoais e financeiras. Ao utilizar o FinanceFlex, você
+            concorda com a coleta e uso de informações de acordo com esta
+            política.
+          </p>
+        </section>
 
-            <section>
-                <h2>1. Informações que Coletamos</h2>
-                <p>
-                    O FinanceFlex foi projetado para ser um aplicativo de gestão financeira pessoal. A privacidade e a segurança dos seus dados são nossa prioridade.
-                </p>
-                <ul>
-                    <li>
-                        <strong>Dados de Autenticação (Firebase):</strong> Se você optar por utilizar a funcionalidade de sincronização em nuvem, coletaremos seu endereço de e-mail e nome de exibição (opcional) para fins de autenticação e sincronização de dados através do Firebase Authentication. Sua senha é armazenada de forma segura e criptografada pelo Firebase e não temos acesso direto a ela.
-                    </li>
-                    <li>
-                        <strong>Dados Financeiros:</strong> Suas informações financeiras, como contas, transações, categorias, cartões de crédito e orçamentos, são armazenadas localmente no seu dispositivo. Se você ativar a sincronização em nuvem, esses dados serão criptografados e armazenados no Firebase Firestore, associados à sua conta de usuário. Esses dados são utilizados exclusivamente para fornecer as funcionalidades do aplicativo e não são acessados, analisados ou compartilhados por nós para outros fins.
-                    </li>
-                    <li>
-                        <strong>Dados de Uso e Diagnóstico:</strong> Podemos coletar informações anônimas sobre como o aplicativo é utilizado (por exemplo, recursos acessados, tempo de uso, erros). Esses dados são agregados e utilizados para melhorar o desempenho, a estabilidade e a experiência do usuário do Aplicativo. Não associamos esses dados a informações de identificação pessoal.
-                    </li>
-                </ul>
-            </section>
+        <section>
+          <h2>1. Informações que Coletamos</h2>
+          <p>
+            O FinanceFlex foi projetado para ser um aplicativo de gestão
+            financeira pessoal. A privacidade e a segurança dos seus dados são
+            nossa prioridade.
+          </p>
+          <ul>
+            <li>
+              <strong>Dados de Autenticação (Firebase):</strong> Se você optar
+              por utilizar a funcionalidade de sincronização em nuvem,
+              coletaremos seu endereço de e-mail e nome de exibição (opcional)
+              para fins de autenticação e sincronização de dados através do
+              Firebase Authentication. Sua senha é armazenada de forma segura e
+              criptografada pelo Firebase e não temos acesso direto a ela.
+            </li>
+            <li>
+              <strong>Dados Financeiros:</strong> Suas informações financeiras,
+              como contas, transações, categorias, cartões de crédito e
+              orçamentos, são armazenadas localmente no seu dispositivo. Se você
+              ativar a sincronização em nuvem, esses dados serão criptografados
+              e armazenados no Firebase Firestore, associados à sua conta de
+              usuário. Esses dados são utilizados exclusivamente para fornecer
+              as funcionalidades do aplicativo e não são acessados, analisados
+              ou compartilhados por nós para outros fins.
+            </li>
+            <li>
+              <strong>Dados de Uso e Diagnóstico:</strong> Podemos coletar
+              informações anônimas sobre como o aplicativo é utilizado (por
+              exemplo, recursos acessados, tempo de uso, erros). Esses dados são
+              agregados e utilizados para melhorar o desempenho, a estabilidade
+              e a experiência do usuário do Aplicativo. Não associamos esses
+              dados a informações de identificação pessoal.
+            </li>
+          </ul>
+        </section>
 
-            <section>
-                <h2>2. Como Usamos Suas Informações</h2>
-                <p>
-                    Utilizamos as informações coletadas para os seguintes propósitos:
-                </p>
-                <ul>
-                    <li>
-                        <strong>Fornecer e Manter o Serviço:</strong> Para operar e manter as funcionalidades do FinanceFlex, incluindo a gestão de suas finanças e a sincronização de dados.
-                    </li>
-                    <li>
-                        <strong>Melhorar o Aplicativo:</strong> Para entender como os usuários interagem com o Aplicativo e identificar áreas para melhoria, correção de bugs e desenvolvimento de novas funcionalidades.
-                    </li>
-                    <li>
-                        <strong>Segurança:</strong> Para proteger a segurança e a integridade do Aplicativo e dos dados dos usuários.
-                    </li>
-                    <li>
-                        <strong>Comunicação (apenas se aplicável):</strong> Para enviar notificações importantes relacionadas ao serviço ou atualizações, caso você tenha optado por recebê-las.
-                    </li>
-                </ul>
-            </section>
+        <section>
+          <h2>2. Como Usamos Suas Informações</h2>
+          <p>
+            Utilizamos as informações coletadas para os seguintes propósitos:
+          </p>
+          <ul>
+            <li>
+              <strong>Fornecer e Manter o Serviço:</strong> Para operar e manter
+              as funcionalidades do FinanceFlex, incluindo a gestão de suas
+              finanças e a sincronização de dados.
+            </li>
+            <li>
+              <strong>Melhorar o Aplicativo:</strong> Para entender como os
+              usuários interagem com o Aplicativo e identificar áreas para
+              melhoria, correção de bugs e desenvolvimento de novas
+              funcionalidades.
+            </li>
+            <li>
+              <strong>Segurança:</strong> Para proteger a segurança e a
+              integridade do Aplicativo e dos dados dos usuários.
+            </li>
+            <li>
+              <strong>Comunicação (apenas se aplicável):</strong> Para enviar
+              notificações importantes relacionadas ao serviço ou atualizações,
+              caso você tenha optado por recebê-las.
+            </li>
+          </ul>
+        </section>
 
-            <section>
-                <h2>3. Compartilhamento de Suas Informações</h2>
-                <p>
-                    Não vendemos, trocamos ou alugamos suas informações de identificação pessoal a terceiros. Suas informações podem ser compartilhadas apenas nas seguintes circunstâncias:
-                </p>
-                <ul>
-                    <li>
-                        <strong>Com Provedores de Serviço:</strong> Utilizamos o Firebase (Google LLC) para autenticação e armazenamento de dados em nuvem. O Firebase atua como nosso processador de dados e está em conformidade com as leis de privacidade aplicáveis. Suas informações financeiras sincronizadas são armazenadas de forma criptografada no Firebase Firestore.
-                    </li>
-                    <li>
-                        <strong>Conformidade Legal:</strong> Podemos divulgar suas informações se exigido por lei ou em resposta a processos legais válidos (por exemplo, uma ordem judicial ou intimação).
-                    </li>
-                </ul>
-            </section>
+        <section>
+          <h2>3. Compartilhamento de Suas Informações</h2>
+          <p>
+            Não vendemos, trocamos ou alugamos suas informações de identificação
+            pessoal a terceiros. Suas informações podem ser compartilhadas
+            apenas nas seguintes circunstâncias:
+          </p>
+          <ul>
+            <li>
+              <strong>Com Provedores de Serviço:</strong> Utilizamos o Firebase
+              (Google LLC) para autenticação e armazenamento de dados em nuvem.
+              O Firebase atua como nosso processador de dados e está em
+              conformidade com as leis de privacidade aplicáveis. Suas
+              informações financeiras sincronizadas são armazenadas de forma
+              criptografada no Firebase Firestore.
+            </li>
+            <li>
+              <strong>Conformidade Legal:</strong> Podemos divulgar suas
+              informações se exigido por lei ou em resposta a processos legais
+              válidos (por exemplo, uma ordem judicial ou intimação).
+            </li>
+          </ul>
+        </section>
 
-            <section>
-                <h2>4. Retenção de Dados</h2>
-                <p>
-                    Manteremos seus dados pessoais apenas pelo tempo necessário para os fins estabelecidos nesta Política de Privacidade. Se você excluir sua conta, seus dados de autenticação e financeiros associados à sincronização em nuvem serão removidos do Firebase. Dados armazenados localmente em seu dispositivo são de sua responsabilidade e serão removidos ao desinstalar o aplicativo ou limpar os dados do aplicativo.
-                </p>
-            </section>
+        <section>
+          <h2>4. Retenção de Dados</h2>
+          <p>
+            Manteremos seus dados pessoais apenas pelo tempo necessário para os
+            fins estabelecidos nesta Política de Privacidade. Se você excluir
+            sua conta, seus dados de autenticação e financeiros associados à
+            sincronização em nuvem serão removidos do Firebase. Dados
+            armazenados localmente em seu dispositivo são de sua
+            responsabilidade e serão removidos ao desinstalar o aplicativo ou
+            limpar os dados do aplicativo.
+          </p>
+        </section>
 
-            <section>
-                <h2>5. Seus Direitos (LGPD)</h2>
-                <p>
-                    De acordo com a Lei Geral de Proteção de Dados (LGPD), você tem os seguintes direitos em relação aos seus dados pessoais:
-                </p>
-                <ul>
-                    <li>
-                        <strong>Acesso:</strong> Solicitar acesso aos seus dados pessoais que possuímos.
-                    </li>
-                    <li>
-                        <strong>Retificação:</strong> Solicitar a correção de dados incompletos ou imprecisos.
-                    </li>
-                    <li>
-                        <strong>Exclusão:</strong> Solicitar a exclusão de seus dados pessoais.
-                    </li>
-                    <li>
-                        <strong>Oposição:</strong> Opor-se ao processamento de seus dados pessoais em determinadas circunstâncias.
-                    </li>
-                    <li>
-                        <strong>Portabilidade:</strong> Solicitar a transferência de seus dados para outro serviço.
-                    </li>
-                    <li>
-                        <strong>Revogação do Consentimento:</strong> Retirar seu consentimento a qualquer momento, quando o processamento for baseado no consentimento.
-                    </li>
-                </ul>
-                <p>
-                    Para exercer qualquer um desses direitos, entre em contato conosco através do e-mail fornecido na seção "Contato".
-                </p>
-            </section>
+        <section>
+          <h2>5. Seus Direitos (LGPD)</h2>
+          <p>
+            De acordo com a Lei Geral de Proteção de Dados (LGPD), você tem os
+            seguintes direitos em relação aos seus dados pessoais:
+          </p>
+          <ul>
+            <li>
+              <strong>Acesso:</strong> Solicitar acesso aos seus dados pessoais
+              que possuímos.
+            </li>
+            <li>
+              <strong>Retificação:</strong> Solicitar a correção de dados
+              incompletos ou imprecisos.
+            </li>
+            <li>
+              <strong>Exclusão:</strong> Solicitar a exclusão de seus dados
+              pessoais.
+            </li>
+            <li>
+              <strong>Oposição:</strong> Opor-se ao processamento de seus dados
+              pessoais em determinadas circunstâncias.
+            </li>
+            <li>
+              <strong>Portabilidade:</strong> Solicitar a transferência de seus
+              dados para outro serviço.
+            </li>
+            <li>
+              <strong>Revogação do Consentimento:</strong> Retirar seu
+              consentimento a qualquer momento, quando o processamento for
+              baseado no consentimento.
+            </li>
+          </ul>
+          <p>
+            Para exercer qualquer um desses direitos, entre em contato conosco
+            através do e-mail fornecido na seção "Contato".
+          </p>
+        </section>
 
-            <section>
-                <h2>6. Segurança dos Dados</h2>
-                <p>
-                    Valorizamos sua confiança em nos fornecer suas informações pessoais, portanto, estamos nos esforçando para usar meios comercialmente aceitáveis de protegê-las. No entanto, lembre-se que nenhum método de transmissão pela Internet ou método de armazenamento eletrônico é 100% seguro e confiável, e não podemos garantir sua segurança absoluta.
-                </p>
-            </section>
+        <section>
+          <h2>6. Segurança dos Dados</h2>
+          <p>
+            Valorizamos sua confiança em nos fornecer suas informações pessoais,
+            portanto, estamos nos esforçando para usar meios comercialmente
+            aceitáveis de protegê-las. No entanto, lembre-se que nenhum método
+            de transmissão pela Internet ou método de armazenamento eletrônico é
+            100% seguro e confiável, e não podemos garantir sua segurança
+            absoluta.
+          </p>
+        </section>
 
-            <section>
-                <h2>7. Links para Outros Sites</h2>
-                <p>
-                    Nosso Serviço pode conter links para outros sites que não são operados por nós. Se você clicar em um link de terceiros, será direcionado para o site desse terceiro. Aconselhamos vivamente que reveja a Política de Privacidade de cada site que visitar. Não temos controle e não assumimos responsabilidade pelo conteúdo, políticas de privacidade ou práticas de quaisquer sites ou serviços de terceiros.
-                </p>
-            </section>
+        <section>
+          <h2>7. Links para Outros Sites</h2>
+          <p>
+            Nosso Serviço pode conter links para outros sites que não são
+            operados por nós. Se você clicar em um link de terceiros, será
+            direcionado para o site desse terceiro. Aconselhamos vivamente que
+            reveja a Política de Privacidade de cada site que visitar. Não temos
+            controle e não assumimos responsabilidade pelo conteúdo, políticas
+            de privacidade ou práticas de quaisquer sites ou serviços de
+            terceiros.
+          </p>
+        </section>
 
-            <section>
-                <h2>8. Privacidade de Crianças</h2>
-                <p>
-                    Nosso Serviço não se destina a menores de 13 anos. Não coletamos intencionalmente informações de identificação pessoal de crianças menores de 13 anos. No caso de descobrirmos que uma criança menor de 13 anos nos forneceu informações pessoais, excluímos imediatamente isso de nossos servidores. Se você é pai/mãe ou responsável e sabe que seu filho nos forneceu informações pessoais, entre em contato conosco para que possamos tomar as medidas necessárias.
-                </p>
-            </section>
+        <section>
+          <h2>8. Privacidade de Crianças</h2>
+          <p>
+            Nosso Serviço não se destina a menores de 13 anos. Não coletamos
+            intencionalmente informações de identificação pessoal de crianças
+            menores de 13 anos. No caso de descobrirmos que uma criança menor de
+            13 anos nos forneceu informações pessoais, excluímos imediatamente
+            isso de nossos servidores. Se você é pai/mãe ou responsável e sabe
+            que seu filho nos forneceu informações pessoais, entre em contato
+            conosco para que possamos tomar as medidas necessárias.
+          </p>
+        </section>
 
-            <section>
-                <h2>9. Alterações a Esta Política de Privacidade</h2>
-                <p>
-                    Podemos atualizar nossa Política de Privacidade de tempos em tempos. Iremos notificá-lo sobre quaisquer alterações publicando a nova Política de Privacidade nesta página. Aconselhamos que você revise esta Política de Privacidade periodicamente para quaisquer alterações. As alterações a esta Política de Privacidade são efetivas quando são publicadas nesta página.
-                </p>
-            </section>
+        <section>
+          <h2>9. Alterações a Esta Política de Privacidade</h2>
+          <p>
+            Podemos atualizar nossa Política de Privacidade de tempos em tempos.
+            Iremos notificá-lo sobre quaisquer alterações publicando a nova
+            Política de Privacidade nesta página. Aconselhamos que você revise
+            esta Política de Privacidade periodicamente para quaisquer
+            alterações. As alterações a esta Política de Privacidade são
+            efetivas quando são publicadas nesta página.
+          </p>
+        </section>
 
-            <section>
-                <h2>10. Contato</h2>
-                <p>
-                    Se você tiver alguma dúvida sobre esta Política de Privacidade, entre em contato conosco:
-                </p>
-                <p>
-                    Por e-mail: <a href="mailto:kaiquedesouzabazil@gmail.com">kaiquedesouzabazil@gmail.com</a>
-                </p>
-            </section>
+        <section>
+          <h2>10. Contato</h2>
+          <p>
+            Se você tiver alguma dúvida sobre esta Política de Privacidade,
+            entre em contato conosco:
+          </p>
+          <p>
+            Por e-mail:
+            <a href="mailto:kaiquedesouzabazil@gmail.com"
+              >kaiquedesouzabazil@gmail.com</a
+            >
+          </p>
+        </section>
 
-            <!-- Divisor entre versões -->
-            <hr class="divider">
+        <!-- Divisor entre versões -->
+        <hr class="divider" />
+      </main>
 
-           
-        </main>
-
-        <footer>
-            <p>© 2026 FinanceFlex. Todos os direitos reservados.</p>
-        </footer>
+      <footer>
+        <p>© 2026 FinanceFlex. Todos os direitos reservados.</p>
+      </footer>
     </div>
-</body>
+  </body>
 </html>
