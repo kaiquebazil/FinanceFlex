@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="💰 FinanceFlex - Controle seus gastos, organize suas finanças e alcance suas metas. App offline, seguro e intuitivo para gestão financeira pessoal." />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://financeflex.app" />
+    <meta property="og:title" content="FinanceFlex - Gestão Financeira Simplificada" />
+    <meta property="og:description" content="💰 FinanceFlex - Controle seus gastos, organize suas finanças e alcance suas metas. App offline, seguro e intuitivo." />
+    <meta property="og:site_name" content="FinanceFlex" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FinanceFlex - Gestão Financeira Simplificada" />
+    
+    <link rel="canonical" href="https://financeflex.app" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+    
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-dark: #6D28D9;
+            --primary-light: #8B5CF6;
+            --secondary: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+            --dark: #1F2937;
+            --gray: #6B7280;
+            --light: #F3F4F6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Floating particles animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-30px) translateX(15px) rotate(90deg); }
+            50% { transform: translateY(-60px) translateX(30px) rotate(180deg); }
+            75% { transform: translateY(-30px) translateX(15px) rotate(270deg); }
+        }
+        
+        .link-body-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%);
+            z-index: -2;
+        }
+        
+        .navbar {
+            padding: 1rem 2rem;
+            justify-content: flex-end;
+            background: transparent;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .showMenu {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .showMenu:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+        
+        .showMenu ._bar {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 4px 0;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .showMenu.iconActive ._bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .showMenu.iconActive ._bar:nth-child(2) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+        
+        .menuContainer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 40px rgba(0,0,0,0.2);
+            transition: right 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            z-index: 1000;
+            padding: 2rem 1.5rem;
+        }
+        
+        .menuContainer.showAll {
+            right: 0;
+        }
+        h4, p {
+            color: #333333;
+        }
+        
+        .listMenu {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .listMenu a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .listMenu a i {
+            width: 24px;
+            color: var(--primary);
+        }
+        
+        .listMenu a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Avatar com pulso */
+        .avatar-wrapper {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(124,58,237,0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 20px rgba(124,58,237,0);
+            }
+        }
+        
+        .link-avatar-round {
+            border-radius: 50%;
+            object-fit: contain;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .link-avatar-round:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+        
+        /* Botões com hover e ícones */
+        .btn-finance {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(124,58,237,0.3);
+            width: 100%;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-finance::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-finance:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-finance:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -8px rgba(124,58,237,0.5);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-outline-finance {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .btn-outline-finance:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-2px);
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .card-info {
+            background: rgba(255,255,255,0.95);
+            border-radius: 28px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-info:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-icon i {
+            font-size: 28px;
+            color: white;
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 20px;
+        }
+        
+        .feature-card:hover {
+            background: rgba(124,58,237,0.05);
+            transform: translateY(-8px);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        
+        .footer-info {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+        
+        h1, h2, h3 {
+            font-weight: 800;
+        }
+        
+        .stats-badge {
+            background: rgba(124,58,237,0.12);
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-weight: 600;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-badge:hover {
+            background: rgba(124,58,237,0.2);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-info {
+                padding: 1.5rem;
+            }
+        }
+        
+        /* Loading animation */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary), var(--primary-dark));
+            z-index: 9999;
+            transition: width 0.3s;
+        }
+        
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Badge pulse */
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .pulse-badge {
+            animation: badgePulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loading-bar" id="loadingBar"></div>
+    <div class="particles" id="particles"></div>
+    <div class="link-body-backdrop"></div>
+
+    <div class="navbar justify-content-end p-3">
+        <button onclick="showMenu()" id="showMenu" class="showMenu">
+            <div class="_bar"></div>
+            <div class="_bar"></div>
+        </button>
+        <div id="menuContainer" class="menuContainer">
+            <div class="listMenu">
+                <a href="#"><i class="fas fa-home"></i> Início</a>
+                <a href="#sobre"><i class="fas fa-info-circle"></i> Sobre</a>
+                <a href="#recursos"><i class="fas fa-cogs"></i> Recursos</a>
+                <a href="Privacy-Policy-pt.html"><i class="fas fa-shield-alt"></i> Política de Privacidade | PT-BR</a>
+                <a href="Privacy-Policy-en.html"><i class="fas fa-globe"></i> Privacy Policy | EN</a>
+                <a href="financeflex-exclusao.html"><i class="fas fa-trash-alt"></i> Exclusão de Conta</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container min-vh-100">
+        <div class="row d-flex justify-content-center text-center">
+            <div class="col-md-10 link-content">
+                <main id="links" class="my-2">
+                    <div class="row" id="blocks_container">
+                        
+                        <!-- Avatar / Logo com animação -->
+                        <div class="col-12 my-3 animate__animated animate__fadeInDown">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="avatar-wrapper" style="border-radius: 50%;">
+                                    <div class="link-avatar-round" style="width: 130px; height: 130px; background: white; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-wallet" style="font-size: 65px; color: #7C3AED;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Título com animação -->
+                        <div class="col-12 my-2 animate__animated animate__fadeInUp">
+                            <h1 class="display-3 font-weight-bold" style="color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                                FinanceFlex
+                            </h1>
+                        </div>
+
+                        <!-- Subtítulo -->
+                        <div class="col-12 my-2 animate__animated animate__fadeInUp animate__delay-1s">
+                            <b style="color: rgba(255,255,255,0.95);">
+                                <i class="fas fa-coins"></i> Gestão Financeira Simplificada </br>
+                                <i class="fas fa-chart-line"></i> Controle total </br>
+                                <i class="fas fa-mobile-alt"></i> 100% Offline </br>
+                                <i class="fas fa-bullseye"></i> Alcance suas metas
+                            </h5>
+                        </div>
+
+                        <!-- Botões com ícones aprimorados -->
+                        <div class="col-12 col-lg-8 offset-lg-2 my-3 animate__animated animate__fadeInUp animate__delay-2s">
+                            <a href="https://play.google.com/store/apps/details?id=com.kaiquebazil.financeflex&hl=pt_BR" target="_blank" class="btn-finance">
+                                <i class="fab fa-google-play fa-lg"></i>
+                                <span>Baixar no Google Play</span>
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-8 offset-lg-2 my-2 animate__animated animate__fadeInUp animate__delay-2s">
+                            <a href="index.html" target="_blank" class="btn-outline-finance">
+                                <i class="fas fa-laptop-code"></i>
+                                <span>Acessar Versão Web</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="col-12 col-lg-8 offset-lg-2 my-2 animate__animated animate__fadeInUp animate__delay-2s">
+                            <a href="https://finance-flex-react.vercel.app/" target="_blank" class="btn-outline-finance" style="background: rgba(255,255,255,0.1);">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Versão Web com Sincronização</span>
+                                <i class="fas fa-sync-alt"></i>
+                            </a>
+                        </div>
+
+                        <!-- Sobre o FinanceFlex -->
+                        <div class="col-12 my-3 scroll-reveal" id="sobre">
+                            <div class="card-info">
+                                <div class="text-center mb-3">
+                                    <span class="stats-badge pulse-badge"><i class="fas fa-chart-line"></i> +10.000 usuários ativos</span>
+                                </div>
+                                <h2 class="text-center mb-4" style="color: var(--dark);">
+                                    <i class="fas fa-gem" style="color: var(--primary);"></i> Por que o FinanceFlex é diferente?
+                                </h2>
+                                
+                                <div class="feature-grid">
+                                    <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+                                        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                                        <h4>100% Offline e Seguro</h4>
+                                        <p style="color: var(--gray);">Seus dados financeiros ficam armazenados localmente. Sem servidores na nuvem, máxima privacidade e conformidade com a LGPD.</p>
+                                    </div>
+                                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                                        <div class="feature-icon"><i class="fas fa-chart-pie"></i></div>
+                                        <h4>Dashboard Inteligente</h4>
+                                        <p style="color: var(--gray);">Visualize gráficos de gastos por categoria, evolução patrimonial e receitas vs despesas em tempo real.</p>
+                                    </div>
+                                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                                        <div class="feature-icon"><i class="fas fa-credit-card"></i></div>
+                                        <h4>Cartões de Crédito</h4>
+                                        <p style="color: var(--gray);">Controle faturas, parcelas e limites. Alertas de vencimento e fechamento automáticos.</p>
+                                    </div>
+                                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                                        <div class="feature-icon"><i class="fas fa-piggy-bank"></i></div>
+                                        <h4>Cofrinhos e Metas</h4>
+                                        <p style="color: var(--gray);">Crie metas financeiras, acompanhe o progresso e realize seus sonhos com planejamento.</p>
+                                    </div>
+                                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                                        <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+                                        <h4>Transferências entre Contas</h4>
+                                        <p style="color: var(--gray);">Registre transferências entre suas contas de forma simples e intuitiva.</p>
+                                    </div>
+                                    <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                                        <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+                                        <h4>Contas Recorrentes</h4>
+                                        <p style="color: var(--gray);">Configure despesas fixas e receba lembretes para nunca mais esquecer uma conta.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Funcionalidades Detalhadas -->
+                        <div class="col-12 my-3 scroll-reveal" id="recursos">
+                            <div class="card-info">
+                                <h3 class="text-center mb-4" style="color: var(--dark);">
+                                    <i class="fas fa-rocket" style="color: var(--primary);"></i> Recursos Incríveis
+                                </h3>
+                                
+                                <div style="text-align: left;">
+                                    <p><i class="fas fa-mobile-alt" style="color: var(--primary); width: 30px;"></i> <strong>Interface Moderna e Intuitiva</strong> - Design limpo e fácil de usar, pensado para você gerenciar suas finanças sem complicação.</p>
+                                    <p><i class="fas fa-building" style="color: var(--primary); width: 30px;"></i> <strong>Múltiplas Contas</strong> - Gerencie contas bancárias, dinheiro em espécie, carteiras digitais e investimentos em um só lugar.</p>
+                                    <p><i class="fas fa-tags" style="color: var(--primary); width: 30px;"></i> <strong>Categorias Personalizáveis</strong> - Crie suas próprias categorias de despesas e receitas para um controle ainda mais detalhado.</p>
+                                    <p><i class="fas fa-calendar-week" style="color: var(--primary); width: 30px;"></i> <strong>Planejamento Financeiro</strong> - Defina orçamentos mensais por categoria e receba alertas ao ultrapassar os limites.</p>
+                                    <p><i class="fas fa-database" style="color: var(--primary); width: 30px;"></i> <strong>Backup e Exportação</strong> - Exporte todos os seus dados em formato JSON e faça backup seguro. Importação fácil para trocar de dispositivo.</p>
+                                    <p><i class="fas fa-bell" style="color: var(--primary); width: 30px;"></i> <strong>Notificações Inteligentes</strong> - Receba lembretes de contas a vencer, faturas de cartão e metas do mês.</p>
+                                </div>
+                                
+                                <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-2" style="gap: 10px;">
+                                    <span class="stats-badge"><i class="fas fa-shield-alt"></i> LGPD Compliant</span>
+                                    <span class="stats-badge"><i class="fas fa-database"></i> Dados Locais</span>
+                                    <span class="stats-badge"><i class="fas fa-sync"></i> Backup Manual</span>
+                                    <span class="stats-badge"><i class="fas fa-chart-simple"></i> Gráficos Interativos</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Download -->
+                        <div class="col-12 my-4 scroll-reveal">
+                            <div class="card-info text-center" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; transform: scale(1); transition: transform 0.3s;">
+                                <h3 class="mb-3" style="color: white;">
+                                    <i class="fas fa-download"></i> Comece a organizar suas finanças hoje!
+                                </h3>
+                                <p style="color: rgba(255,255,255,0.95);">Junte-se a milhares de usuários que já transformaram sua vida financeira com o FinanceFlex.</p>
+                                <div class="row mt-4">
+                                    <div class="col-md-6 offset-md-3">
+                                        <a href="https://play.google.com/store/apps/details?id=com.financeflex.app" target="_blank" class="btn btn-light btn-block font-weight-bold py-3 rounded-pill" style="color: var(--primary); transition: all 0.3s;">
+                                            <i class="fab fa-google-play"></i> Baixar Agora - Grátis
+                                            <i class="fas fa-heart" style="color: var(--danger);"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Links Política e Exclusão -->
+                        <div class="col-12 col-lg-8 offset-lg-2 my-2">
+                            <a href="Privacy-Policy-pt.html" class="btn-outline-finance d-flex align-items-center justify-content-center gap-2" style="gap: 10px; background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5);">
+                                <i class="fas fa-file-contract"></i>
+                                <span>📄 Política de Privacidade - PT</span>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-8 offset-lg-2 my-2">
+                            <a href="Privacy-Policy-en.html" class="btn-outline-finance d-flex align-items-center justify-content-center gap-2" style="gap: 10px; background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5);">
+                                <i class="fas fa-file-signature"></i>
+                                <span>📄 Privacy Policy - EN</span>
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-lg-8 offset-lg-2 my-2 mb-4">
+                            <a href="financeflex-exclusao.html" class="btn-outline-finance d-flex align-items-center justify-content-center gap-2" style="gap: 10px; background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.5);">
+                                <i class="fas fa-user-minus"></i>
+                                <span>🗑️ Solicitar Exclusão de Conta</span>
+                            </a>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="col-12">
+                            <footer class="footer-info">
+                                <p><i class="far fa-copyright"></i> 2026 FinanceFlex. Todos os direitos reservados.</p>
+                                <p style="font-size: 0.75rem;"><i class="fas fa-shield-alt"></i> Gestão financeira pessoal com segurança e privacidade</p>
+                            </footer>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50
+        });
+        
+        // Loading bar animation
+        window.addEventListener('load', function() {
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.style.width = '100%';
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                setTimeout(() => {
+                    loadingBar.style.display = 'none';
+                }, 300);
+            }, 500);
+        });
+        
+        // Criar partículas flutuantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 35; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 15 + 5;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = Math.random() * 10 + 12 + 's';
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Menu toggle
+        function showMenu() {
+            var ico = document.getElementById("showMenu");
+            ico.classList.toggle("iconActive");
+            var element = document.getElementById("menuContainer");
+            element.classList.toggle("showAll");
+        }
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('menuContainer');
+            const btn = document.getElementById('showMenu');
+            if (menu && menu.classList.contains('showAll')) {
+                if (!menu.contains(event.target) && !btn.contains(event.target)) {
+                    menu.classList.remove('showAll');
+                    btn.classList.remove('iconActive');
+                }
+            }
+        });
+        
+        // Scroll reveal manual (fallback)
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        function checkReveal() {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                if (rect.top < windowHeight - 100) {
+                    el.classList.add('revealed');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkReveal);
+        window.addEventListener('load', checkReveal);
+        
+        // Smooth scroll para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    if (document.getElementById('menuContainer').classList.contains('showAll')) {
+                        document.getElementById('menuContainer').classList.remove('showAll');
+                        document.getElementById('showMenu').classList.remove('iconActive');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
